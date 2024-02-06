@@ -11,12 +11,12 @@ import { createReadStream } from "fs";
 const videoDir = "tmp";
 
 // // Make sure the video directory exists
-if (!fsSync.existsSync(videoDir)) {
-  console.log("Creating new dir:");
-  fsSync.mkdirSync(videoDir, 0o777);
-} else {
-  console.log("dir Exists");
-}
+// if (!fsSync.existsSync(videoDir)) {
+//   console.log("Creating new dir:");
+//   fsSync.mkdirSync(videoDir, 0o777);
+// } else {
+//   console.log("dir Exists");
+// }
 
 export const config = {
   api: {

@@ -205,6 +205,8 @@ export const GetTextures = (nodesArray: any, offset: number) => {
     );
     // console.log(texture);
     texture.flipY = false;
+    texture.encoding = THREE.sRGBEncoding;
+    texture.needsUpdate = true;
     Pages.push(texture);
   });
   return Pages;

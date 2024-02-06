@@ -8,7 +8,7 @@ import url from "url";
 import ffmpeg from "fluent-ffmpeg";
 import { createReadStream } from "fs";
 
-// const videoDir = "/public/videos";
+const videoDir = "videos";
 
 // // Make sure the video directory exists
 // if (!fsSync.existsSync(videoDir)) {
@@ -45,7 +45,8 @@ export default async function handler(
       // auth-api.mp4
       const fileName = info.filename;
       console.log("fileName:", fileName);
-      filePath = `./public/${fileName}`;
+      filePath = path.join(videoDir, fileName);
+      // filePath = `./${fileName}`;
       const filePath2 = `./${fileName}`;
 
       const stream = createWriteStream(filePath);
@@ -53,7 +54,7 @@ export default async function handler(
       file.pipe(stream).on("finish", () => {
         try {
           console.log("1:", filePath);
-          ffmpeg(filePath2)
+          ffmpeg(filePath)
             .on("end", function () {
               console.log("Screenshots taken");
               res.status(200).json({

@@ -104,7 +104,7 @@ function CallPost(req: NextApiRequest, res: NextApiResponse) {
     console.log("fileName:", fileName);
     // filePath = path.join(process.cwd(), "pages", "staticAssets", fileName);
     // filePath = path.join(videoDir, fileName);
-    filePath = path.join("/tmp", fileName);
+    filePath = path.join("tmp", fileName);
     const filePath2 = path.join("tmp", fileName);
     // filePath = `./${fileName}`;
     // const filePath2 = `./${fileName}`;

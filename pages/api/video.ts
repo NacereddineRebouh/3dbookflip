@@ -32,51 +32,57 @@ export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse
 ) {
-  let filePath = "";
-  const bb = busboy({ headers: req.headers });
-  console.log("file", req.body);
+  const method = req.method;
 
-  bb.on("file", (_, file, info) => {
-    // auth-api.mp4
-    const fileName = info.filename;
-    console.log("fileName:", fileName);
-    filePath = `./videos/${fileName}`;
+  if (method === "POST") {
+    let filePath = "";
+    const bb = busboy({ headers: req.headers });
+    console.log("file", req.body);
 
-    const stream = createWriteStream(filePath);
+    bb.on("file", (_, file, info) => {
+      // auth-api.mp4
+      const fileName = info.filename;
+      console.log("fileName:", fileName);
+      filePath = `./videos/${fileName}`;
 
-    file.pipe(stream).on("finish", () => {
-      try {
-        ffmpeg(filePath)
-          .on("end", function () {
-            console.log("Screenshots taken");
-            res.status(200).json({
-              message: "Screenshots Taken",
+      const stream = createWriteStream(filePath);
+
+      file.pipe(stream).on("finish", () => {
+        try {
+          ffmpeg(filePath)
+            .on("end", function () {
+              console.log("Screenshots taken");
+              res.status(200).json({
+                message: "Screenshots Taken",
+              });
+            })
+            .screenshots({
+              // Will take screens at 20%, 40%, 60% and 80% of the video
+              count: 48,
+              filename: "Pages_%00i.jpeg",
+              folder: "./public/screens",
             });
-          })
-          .screenshots({
-            // Will take screens at 20%, 40%, 60% and 80% of the video
-            count: 48,
-            filename: "Pages_%00i.jpeg",
-            folder: "./public/screens",
-          });
-      } catch (error) {
-        console.error(error);
-        res
-          .status(500)
-          .send(
-            "An error occurred while downloading the video and transcript."
-          );
-      }
+        } catch (error) {
+          console.error(error);
+          res
+            .status(500)
+            .send(
+              "An error occurred while downloading the video and transcript."
+            );
+        }
+      });
     });
-  });
 
-  // bb.on("close", () => {
+    // bb.on("close", () => {
 
-  //   res.writeHead(200, { Connection: "close" });
-  //   res.end(`That's the end`);
-  // });
+    //   res.writeHead(200, { Connection: "close" });
+    //   res.end(`That's the end`);
+    // });
 
-  req.pipe(bb);
+    req.pipe(bb);
+  } else {
+    return res.status(405).json({ error: `Method ${method} is not allowed` });
+  }
 
   // try {
   //   ffmpeg(filePath)

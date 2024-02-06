@@ -45,8 +45,7 @@ export default async function handler(
       // auth-api.mp4
       const fileName = info.filename;
       console.log("fileName:", fileName);
-      filePath = `./${fileName}`;
-      const filePath2 = `/public/videos/${fileName}`;
+      filePath = `./public/${fileName}`;
 
       const stream = createWriteStream(filePath);
       console.log("0", filePath);

@@ -116,9 +116,11 @@ function CallPost(req: NextApiRequest, res: NextApiResponse) {
       const fileContent = readFileSync(`/tmp/${fileName}`);
       const b = fileContent.buffer;
       const stream = Readable.from(fileContent);
+      const fileStream = new Readable();
+      fileStream.push(file);
       try {
         console.log("1:", filePath);
-        ffmpeg(stream)
+        ffmpeg(fileStream)
           .on("end", function () {
             console.log("Screenshots taken");
             res.status(200).json({

@@ -113,9 +113,11 @@ function CallPost(req: NextApiRequest, res: NextApiResponse) {
     console.log("0", filePath);
     console.log("0.5", filePath2);
     file.pipe(stream).on("finish", () => {
+      const inputStream = createReadStream(filePath);
       try {
-        console.log("1:", filePath);
-        ffmpeg(filePath2)
+        console.log("1:", inputStream);
+        const f = inputStream.path;
+        ffmpeg(f as string)
           .on("end", function () {
             console.log("Screenshots taken");
             res.status(200).json({

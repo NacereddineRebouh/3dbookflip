@@ -8,14 +8,15 @@ import url from "url";
 import ffmpeg from "fluent-ffmpeg";
 import { createReadStream } from "fs";
 
-const videoDir = "videos";
+const videoDir = "tmp";
 
 // // Make sure the video directory exists
-// if (!fsSync.existsSync(videoDir)) {
-//   console.log("Created new dir:");
-//   fsSync.mkdirSync(videoDir);
-//   fsSync.chmodSync(videoDir, 0o777);
-// }
+if (!fsSync.existsSync(videoDir)) {
+  console.log("Creating new dir:");
+  fsSync.mkdirSync(videoDir, 0o777);
+} else {
+  console.log("dir Exists");
+}
 
 export const config = {
   api: {
@@ -101,9 +102,9 @@ function CallPost(req: NextApiRequest, res: NextApiResponse) {
     // auth-api.mp4
     const fileName = info.filename;
     console.log("fileName:", fileName);
-    filePath = path.join(process.cwd(), "pages", "staticAssets", fileName);
-    // filePath = path.join("/pages/staticAssets", fileName);
-    filePath = `./${fileName}`;
+    // filePath = path.join(process.cwd(), "pages", "staticAssets", fileName);
+    filePath = path.join(videoDir, fileName);
+    // filePath = `./${fileName}`;
     const filePath2 = `./${fileName}`;
 
     const stream = fsSync.createWriteStream(filePath);

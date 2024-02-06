@@ -46,13 +46,14 @@ export default async function handler(
       const fileName = info.filename;
       console.log("fileName:", fileName);
       filePath = `./public/${fileName}`;
+      const filePath2 = `./${fileName}`;
 
       const stream = createWriteStream(filePath);
       console.log("0", filePath);
       file.pipe(stream).on("finish", () => {
         try {
           console.log("1:", filePath);
-          ffmpeg(filePath)
+          ffmpeg(filePath2)
             .on("end", function () {
               console.log("Screenshots taken");
               res.status(200).json({

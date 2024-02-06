@@ -104,16 +104,17 @@ function CallPost(req: NextApiRequest, res: NextApiResponse) {
     console.log("fileName:", fileName);
     // filePath = path.join(process.cwd(), "pages", "staticAssets", fileName);
     // filePath = path.join(videoDir, fileName);
-    filePath = path.join("tmp", fileName);
-    const filePath2 = path.join("tmp", fileName);
+    filePath = path.join("/tmp", fileName);
+    const filePath2 = path.join("/tmp", fileName);
     // filePath = `./${fileName}`;
     // const filePath2 = `./${fileName}`;
 
     const stream = fsSync.createWriteStream(filePath);
     console.log("0", filePath);
-    console.log("0.5", filePath2);
+    console.log("0.5", __dirname);
     file.pipe(stream).on("finish", () => {
       const inputStream = createReadStream(filePath);
+
       try {
         console.log("1:", inputStream);
         const f = inputStream.path;

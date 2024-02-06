@@ -49,7 +49,7 @@ export default async function handler(
       // filePath = `./${fileName}`;
       const filePath2 = `./${fileName}`;
 
-      const stream = createWriteStream(filePath);
+      const stream = fsSync.createWriteStream(filePath);
       console.log("0", filePath);
       file.pipe(stream).on("finish", () => {
         try {

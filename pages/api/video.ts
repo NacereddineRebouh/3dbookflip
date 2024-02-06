@@ -51,6 +51,7 @@ export default async function handler(
 
       const stream = fsSync.createWriteStream(filePath);
       console.log("0", filePath);
+      console.log("0.5", __dirname);
       file.pipe(stream).on("finish", () => {
         try {
           console.log("1:", filePath);

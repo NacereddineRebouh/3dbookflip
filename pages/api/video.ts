@@ -8,7 +8,13 @@ import url from "url";
 import ffmpeg from "fluent-ffmpeg";
 import { createReadStream } from "fs";
 
-const videoDir = "/videos";
+const videoDir = "videos";
+
+// Make sure the video directory exists
+if (!fsSync.existsSync(videoDir)) {
+  console.log("Created new dir:");
+  fsSync.mkdirSync(videoDir);
+}
 
 export const config = {
   api: {
@@ -32,7 +38,7 @@ export default async function handler(
   if (method === "POST") {
     let filePath = "";
     const bb = busboy({ headers: req.headers });
-    // console.log("file", req.body);
+    console.log("file", req.body);
 
     bb.on("file", (_, file, info) => {
       // auth-api.mp4

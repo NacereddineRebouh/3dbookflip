@@ -244,7 +244,7 @@ const FlipBook = ({
           castShadow
           ImagesReady={ImagesReady}
           StartAnimation={StartAnimation}
-        />{" "}
+        />
       </Suspense>
     </group>
   );

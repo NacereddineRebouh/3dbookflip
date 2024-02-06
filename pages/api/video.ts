@@ -1,7 +1,7 @@
 import { NextApiRequest, NextApiResponse } from "next";
 import ytdl from "ytdl-core";
 import { YoutubeTranscript } from "youtube-transcript";
-import fsSync, { createWriteStream, promises as fs } from "fs";
+import fsSync, { createWriteStream, promises as fs, readFileSync } from "fs";
 import path from "path";
 import busboy from "busboy";
 import url from "url";
@@ -105,20 +105,17 @@ function CallPost(req: NextApiRequest, res: NextApiResponse) {
     // filePath = path.join(process.cwd(), "pages", "staticAssets", fileName);
     // filePath = path.join(videoDir, fileName);
     filePath = path.join("/tmp", fileName);
-    const filePath2 = path.join("/tmp", fileName);
+    // const filePath2 = path.join("/tmp", fileName);
     // filePath = `./${fileName}`;
     // const filePath2 = `./${fileName}`;
-
-    const stream = fsSync.createWriteStream(filePath);
-    console.log("0", filePath);
-    console.log("0.5", __dirname);
-    file.pipe(stream).on("finish", () => {
-      const inputStream = createReadStream(filePath);
-
+    let writeStream = createWriteStream(`/tmp/${fileName}`);
+    file.pipe(writeStream);
+    writeStream.on("finish", function () {
+      //once the doc stream is completed, read the file from the tmp folder
+      const fileContent = readFileSync(`/tmp/${fileName}`);
       try {
-        console.log("1:", inputStream);
-        const f = inputStream.path;
-        ffmpeg(f as string)
+        console.log("1:", filePath);
+        ffmpeg(`/tmp/${fileName}`)
           .on("end", function () {
             console.log("Screenshots taken");
             res.status(200).json({
@@ -140,6 +137,14 @@ function CallPost(req: NextApiRequest, res: NextApiResponse) {
           );
       }
     });
+    //create the params for the aws s3 bucket
+
+    // const stream = fsSync.createWriteStream(filePath);
+    console.log("0", filePath);
+    console.log("0.5", __dirname);
+    // file.pipe(stream).on("finish", () => {
+
+    // });
   });
 
   // bb.on("close", () => {

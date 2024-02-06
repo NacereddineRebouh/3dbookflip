@@ -7,6 +7,7 @@ import busboy from "busboy";
 import url from "url";
 import ffmpeg from "fluent-ffmpeg";
 import { createReadStream } from "fs";
+import { Readable } from "stream";
 
 const videoDir = "tmp";
 
@@ -113,9 +114,11 @@ function CallPost(req: NextApiRequest, res: NextApiResponse) {
     writeStream.on("finish", function () {
       //once the doc stream is completed, read the file from the tmp folder
       const fileContent = readFileSync(`/tmp/${fileName}`);
+      const b = fileContent.buffer;
+      const stream = Readable.from(fileContent);
       try {
         console.log("1:", filePath);
-        ffmpeg(`/tmp/${fileName}`)
+        ffmpeg(stream)
           .on("end", function () {
             console.log("Screenshots taken");
             res.status(200).json({

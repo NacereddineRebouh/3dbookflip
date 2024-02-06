@@ -81,4 +81,4 @@ export function Book(props: propsBook) {
   );
 }
 
-useGLTF.preload("/Models/Transformed/Book-transformed.glb");
+//useGLTF.preload("/Models/Transformed/Book-transformed.glb");

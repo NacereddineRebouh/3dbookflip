@@ -176,4 +176,4 @@ export function Pages_040(props: propsBook) {
   );
 }
 
-useGLTF.preload("/Models/Transformed/Pages_040.glb");
+//useGLTF.preload("/Models/Transformed/Pages_040.glb");

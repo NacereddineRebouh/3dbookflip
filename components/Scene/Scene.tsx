@@ -4,13 +4,19 @@ import { Canvas, useLoader } from "@react-three/fiber";
 import React, {
   Dispatch,
   SetStateAction,
+  Suspense,
   useEffect,
   useRef,
   useState,
 } from "react";
 import { Perf } from "r3f-perf";
 
-import { ContactShadows, OrbitControls, useTexture } from "@react-three/drei";
+import {
+  ContactShadows,
+  OrbitControls,
+  useProgress,
+  useTexture,
+} from "@react-three/drei";
 import { Book } from "./Book";
 import { Pages_000 } from "./Pages_000";
 import { Pages_008 } from "./Pages_008";
@@ -23,13 +29,14 @@ import axios, { AxiosProgressEvent, AxiosRequestConfig } from "axios";
 type Props = {
   Video: File | null;
   setUploaded: Dispatch<SetStateAction<boolean | null>>;
+  setPercentage: Dispatch<SetStateAction<number>>;
 };
-export default function Scene({ Video, setUploaded }: Props) {
+export default function Scene({ Video, setUploaded, setPercentage }: Props) {
   const [ImagesReady, setImagesReady] = useState<boolean>(false);
   const [StartAnimation, setStartAnimation] = useState<boolean>(false);
   const [uploadProgress, setUploadProgress] = useState<number>(0);
   useEffect(() => {
-    console.log("uploadProgress;", uploadProgress);
+    // console.log("uploadProgress;", uploadProgress);
   }, [uploadProgress]);
   useEffect(() => {
     if (Video) {
@@ -74,10 +81,10 @@ export default function Scene({ Video, setUploaded }: Props) {
             },
           };
 
-          console.log(data);
+          // console.log(data);
           const res = await axios.post("/api/video", data, config);
 
-          console.log("File uploaded successfully", res);
+          // console.log("File uploaded successfully", res);
 
           if (res.status == 200) {
             setImagesReady(true);
@@ -86,12 +93,12 @@ export default function Scene({ Video, setUploaded }: Props) {
               setStartAnimation(true);
             }, 1000);
             setUploaded(true);
-            console.log(
-              "// -------------- Starting the animation ....-------------- //"
-            );
+            // console.log(
+            // "// -------------- Starting the animation ....-------------- //"
+            // );
           }
         } catch (error) {
-          console.log("Upload Failed");
+          // console.log("Upload Failed");
         }
       };
 
@@ -99,13 +106,7 @@ export default function Scene({ Video, setUploaded }: Props) {
     }
   }, [Video]);
   //Loading
-  // const { progress, loaded, total } = useProgress();
-  // const dispatch = useAppDispatch();
-  // // ------- //
-  // useEffect(() => {
-  //   const value = ((loaded / 14) * 100).toFixed(0) as unknown as number;
-  //   dispatch(setPercentage(value));
-  // }, [progress, loaded]);
+
   const bool = false;
   return (
     <Canvas
@@ -140,6 +141,7 @@ export default function Scene({ Video, setUploaded }: Props) {
       </mesh>
       <FlipBook
         bool={bool}
+        setPercentage={setPercentage}
         setUploaded={setUploaded}
         setImagesReady={setImagesReady}
         ImagesReady={ImagesReady}
@@ -157,6 +159,7 @@ const FlipBook = ({
   setUploaded,
   setImagesReady,
   setStartAnimation,
+  setPercentage,
 }: {
   bool: boolean;
   ImagesReady: boolean;
@@ -164,6 +167,7 @@ const FlipBook = ({
   setUploaded: Dispatch<SetStateAction<boolean | null>>;
   setImagesReady: Dispatch<SetStateAction<boolean>>;
   setStartAnimation: Dispatch<SetStateAction<boolean>>;
+  setPercentage: Dispatch<SetStateAction<number>>;
 }) => {
   const [
     Paper_Color,
@@ -178,6 +182,13 @@ const FlipBook = ({
     "/Textures/BookCover_Normal_map.webp",
     "/Textures/BookCover_Roughness_map.webp",
   ]);
+  const { progress, loaded, total } = useProgress();
+  // const dispatch = useAppDispatch();
+  // // ------- //
+  useEffect(() => {
+    const value = ((loaded / 24) * 100).toFixed(0) as unknown as number;
+    setPercentage(value);
+  }, [progress, loaded]);
   return (
     <group scale={[5, 5, 5]}>
       <Book
@@ -188,51 +199,53 @@ const FlipBook = ({
         ImagesReady={ImagesReady}
         StartAnimation={StartAnimation}
       />
-      <Pages_000
-        DiffuseMap={Paper_Color}
-        BumpMap={Paper_Bump}
-        ImagesReady={ImagesReady}
-        StartAnimation={StartAnimation}
-        setUploaded={setUploaded}
-        setImagesReady={setImagesReady}
-        setStartAnimation={setStartAnimation}
-        castShadow
-      />
-      <Pages_008
-        DiffuseMap={Paper_Color}
-        BumpMap={Paper_Bump}
-        castShadow
-        ImagesReady={ImagesReady}
-        StartAnimation={StartAnimation}
-      />
-      <Pages_016
-        DiffuseMap={Paper_Color}
-        BumpMap={Paper_Bump}
-        castShadow
-        ImagesReady={ImagesReady}
-        StartAnimation={StartAnimation}
-      />
-      <Pages_024
-        DiffuseMap={Paper_Color}
-        BumpMap={Paper_Bump}
-        castShadow
-        ImagesReady={ImagesReady}
-        StartAnimation={StartAnimation}
-      />
-      <Pages_032
-        DiffuseMap={Paper_Color}
-        BumpMap={Paper_Bump}
-        castShadow
-        ImagesReady={ImagesReady}
-        StartAnimation={StartAnimation}
-      />
-      <Pages_040
-        DiffuseMap={Paper_Color}
-        BumpMap={Paper_Bump}
-        castShadow
-        ImagesReady={ImagesReady}
-        StartAnimation={StartAnimation}
-      />
+      <Suspense fallback={null}>
+        <Pages_000
+          DiffuseMap={Paper_Color}
+          BumpMap={Paper_Bump}
+          ImagesReady={ImagesReady}
+          StartAnimation={StartAnimation}
+          setUploaded={setUploaded}
+          setImagesReady={setImagesReady}
+          setStartAnimation={setStartAnimation}
+          castShadow
+        />
+        <Pages_008
+          DiffuseMap={Paper_Color}
+          BumpMap={Paper_Bump}
+          castShadow
+          ImagesReady={ImagesReady}
+          StartAnimation={StartAnimation}
+        />
+        <Pages_016
+          DiffuseMap={Paper_Color}
+          BumpMap={Paper_Bump}
+          castShadow
+          ImagesReady={ImagesReady}
+          StartAnimation={StartAnimation}
+        />
+        <Pages_024
+          DiffuseMap={Paper_Color}
+          BumpMap={Paper_Bump}
+          castShadow
+          ImagesReady={ImagesReady}
+          StartAnimation={StartAnimation}
+        />
+        <Pages_032
+          DiffuseMap={Paper_Color}
+          BumpMap={Paper_Bump}
+          castShadow
+          ImagesReady={ImagesReady}
+          StartAnimation={StartAnimation}
+        />
+        <Pages_040
+          DiffuseMap={Paper_Color}
+          BumpMap={Paper_Bump}
+          castShadow
+          ImagesReady={ImagesReady}
+          StartAnimation={StartAnimation}
+        />{" "}
+      </Suspense>
     </group>
   );
 };

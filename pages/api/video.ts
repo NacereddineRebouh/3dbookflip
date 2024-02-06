@@ -8,12 +8,7 @@ import url from "url";
 import ffmpeg from "fluent-ffmpeg";
 import { createReadStream } from "fs";
 
-const videoDir = "videos";
-
-// Make sure the video directory exists
-if (!fsSync.existsSync(videoDir)) {
-  fsSync.mkdirSync(videoDir);
-}
+const videoDir = "/videos";
 
 export const config = {
   api: {
@@ -37,7 +32,7 @@ export default async function handler(
   if (method === "POST") {
     let filePath = "";
     const bb = busboy({ headers: req.headers });
-    console.log("file", req.body);
+    // console.log("file", req.body);
 
     bb.on("file", (_, file, info) => {
       // auth-api.mp4
@@ -81,7 +76,7 @@ export default async function handler(
 
     req.pipe(bb);
   } else {
-    return res.status(405).json({ error: `Method ${method} is not allowed` });
+    return res.status(500).json({ error: `Method ${method} is not allowed` });
   }
 
   // try {

@@ -74,7 +74,6 @@ export function Pages_000(props: propsBook) {
 
   useEffect(() => {
     if (props.ImagesReady) {
-      console.log("--- Inside Page 000 and starting ---");
       const Pages = GetTextures(nodesArray, 0);
       const mt: THREE.MeshStandardMaterial[] = [];
       Materials.map((material, index) => {
@@ -90,8 +89,6 @@ export function Pages_000(props: propsBook) {
   }, [props.ImagesReady]);
   useEffect(() => {
     const onFinshed = () => {
-      console.log("--- Inside onFinshed && Closing ---");
-
       props.setImagesReady(false);
       props.setStartAnimation(false);
       props.setUploaded(null);
@@ -212,4 +209,4 @@ export const GetTextures = (nodesArray: any, offset: number) => {
   });
   return Pages;
 };
-useGLTF.preload("/Models/Transformed/Pages_000.glb");
+//useGLTF.preload("/Models/Transformed/Pages_000.glb");

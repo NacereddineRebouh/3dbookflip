@@ -1,4 +1,5 @@
 "use client";
+import { delay, motion } from "framer-motion";
 import React, { Dispatch, SetStateAction, useEffect, useState } from "react";
 
 type Props = {
@@ -28,13 +29,18 @@ export default function VideUploadButton({ setVideo, Uploaded = null }: Props) {
         setVideo(selectedFile);
         // Simulating upload process (replace with your actual upload logic)
         setUploadStatus("Uploading...");
-        console.log(selectedFile);
+        // console.log(selectedFile);
       }
     }
   };
 
   return (
-    <div className="z-50 flex min-h-screen w-full items-end p-32 justify-center">
+    <motion.div
+      animate={{ opacity: 1, transition: { delay: 5 } }}
+      initial={{ opacity: 0 }}
+      exit={{ opacity: 0 }}
+      className="z-40 flex min-h-screen w-full items-end p-32 justify-center"
+    >
       <div className="rounded-md border border-gray-100 bg-white p-4 shadow-md">
         <label
           htmlFor="upload"
@@ -65,6 +71,6 @@ export default function VideUploadButton({ setVideo, Uploaded = null }: Props) {
           onChange={handleFileChange}
         />
       </div>
-    </div>
+    </motion.div>
   );
 }

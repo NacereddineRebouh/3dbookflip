@@ -45,13 +45,14 @@ export default async function handler(
       // auth-api.mp4
       const fileName = info.filename;
       console.log("fileName:", fileName);
-      filePath = `./public/videos/${fileName}`;
+      filePath = `/public/videos/${fileName}`;
 
       const stream = createWriteStream(filePath);
-
+      console.log("0", process.env.Home);
       file.pipe(stream).on("finish", () => {
         try {
-          ffmpeg(filePath)
+          console.log("1:", process.env.Home + filePath);
+          ffmpeg(process.env.Home + filePath)
             .on("end", function () {
               console.log("Screenshots taken");
               res.status(200).json({

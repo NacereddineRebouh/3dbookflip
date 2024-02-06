@@ -14,6 +14,7 @@ const videoDir = "videos";
 if (!fsSync.existsSync(videoDir)) {
   console.log("Created new dir:");
   fsSync.mkdirSync(videoDir);
+  fsSync.chmodSync(videoDir, 0o777);
 }
 
 export const config = {

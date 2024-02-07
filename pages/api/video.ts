@@ -6,6 +6,8 @@ import fsSync, {
   writeFileSync,
   promises as fs,
   readFileSync,
+  readdir,
+  readdirSync,
 } from "fs";
 import path from "path";
 import busboy from "busboy";
@@ -19,12 +21,13 @@ const videoDir = "videos/screens";
 console.log("__dirname ", __dirname);
 console.log("__filename", __filename);
 // // Make sure the video directory exists
-if (!fsSync.existsSync(videoDir)) {
-  console.log("Creating new dir:");
-  fsSync.mkdirSync(videoDir, 0o777);
-} else {
-  console.log("dir Exists");
-}
+
+// if (!fsSync.existsSync(videoDir)) {
+//   console.log("Creating new dir:");
+//   fsSync.mkdirSync(videoDir, 0o777);
+// } else {
+//   console.log("dir Exists");
+// }
 
 export const config = {
   api: {
@@ -118,7 +121,7 @@ async function CallPost(req: NextApiRequest, res: NextApiResponse) {
     // const filePath2 = `./${fileName}`;
     let writeStream = createWriteStream(filePath);
     file.pipe(writeStream);
-    writeStream.on("finish", function () {
+    writeStream.on("finish", async function () {
       //once the doc stream is completed, read the file from the tmp folder
       const fileContent = readFileSync(filePath);
       // const b = fileContent.buffer;
@@ -129,6 +132,8 @@ async function CallPost(req: NextApiRequest, res: NextApiResponse) {
       const filePath2 = createReadStream(filePath); // Adjust the path
       // writeFileSync(filePath, fileContent);
 
+      const files = readdirSync(__dirname);
+      console.log("files:", files);
       console.log("checking if file is saved 0.6", fileContent);
       console.log("checking if file is saved createReadStream", filePath2.path);
       try {

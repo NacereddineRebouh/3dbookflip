@@ -131,7 +131,7 @@ async function CallPost(req: NextApiRequest, res: NextApiResponse) {
       console.log("checking if file is saved createReadStream", filePath2.path);
       try {
         console.log("1:", filePath);
-        ffmpeg(filePath)
+        ffmpeg(filePath2)
           .on("end", function () {
             console.log("Screenshots taken");
             res.status(200).json({
@@ -140,8 +140,8 @@ async function CallPost(req: NextApiRequest, res: NextApiResponse) {
           })
           .screenshots({
             // Will take screens at 20%, 40%, 60% and 80% of the video
-            // timestamps: [],
-            count: 48,
+            timestamps: ["10%", "20%", "50%"],
+            // count: 48,
             filename: "Pages_%00i.jpeg",
             folder: "./public/screens",
           });

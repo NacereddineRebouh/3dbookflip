@@ -143,6 +143,8 @@ async function CallPost(req: NextApiRequest, res: NextApiResponse) {
         ffmpeg(filePath)
           .on("end", function () {
             console.log("Screenshots taken");
+            const files = readdirSync("/tmp");
+            console.log("files:", files);
             res.status(200).json({
               message: "Screenshots Taken",
             });
@@ -152,7 +154,7 @@ async function CallPost(req: NextApiRequest, res: NextApiResponse) {
             timestamps: [1, 1.5, 2, 3, 3.2, 3.6, 3.9, 5],
             // count: 48,
             filename: "Pages_%00i.jpeg",
-            folder: "../../public/screens",
+            folder: "/tmp",
             // folder: "/public/screens",
           });
       } catch (error) {

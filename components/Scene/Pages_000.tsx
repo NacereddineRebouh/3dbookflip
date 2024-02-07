@@ -211,7 +211,6 @@ export const GetTextures = (nodesArray: any, offset: number) => {
     // console.log(texture);
     texture.flipY = false;
     texture.colorSpace = THREE.SRGBColorSpace;
-    texture.needsUpdate = true;
     Pages.push(texture);
   });
   return Pages;

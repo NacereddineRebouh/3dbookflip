@@ -145,7 +145,7 @@ async function CallPost(req: NextApiRequest, res: NextApiResponse) {
           .on("end", function () {
             console.log("Screenshots taken");
             const fileContent = readFileSync("/tmp/Pages_001.jpeg");
-            console.log("---Page 001:", fileContent);
+            console.log("---Page 001:", fileContent.byteLength);
 
             const tmpDir = "/tmp"; // Update with your actual temporary directory path
             const files = readdirSync(tmpDir);
@@ -161,7 +161,7 @@ async function CallPost(req: NextApiRequest, res: NextApiResponse) {
                 content: readFileSync(filePath, "utf-8"), // or use 'binary' if the files are binary
               };
             });
-            console.log("---Pages:", fileContents);
+            console.log("---Pages:", fileContents.length);
 
             // Send the files in the response
             res

@@ -138,18 +138,35 @@ async function CallPost(req: NextApiRequest, res: NextApiResponse) {
 
       console.log("checking if file is saved 0.6", fileContent);
       console.log("checking if file is saved createReadStream", filePath2.path);
+      const Files = [];
       try {
         console.log("1:", fileName);
         ffmpeg(filePath)
           .on("end", function () {
             console.log("Screenshots taken");
-            const files = readdirSync("/tmp");
-            console.log("files:", files);
-            const fileContent = readFileSync("/tmp/Pages_001?jpeg");
-            console.log("---fileContent:", fileContent);
-            res.status(200).json({
-              message: "Screenshots Taken",
+            const fileContent = readFileSync("/tmp/Pages_001.jpeg");
+            console.log("---Page 001:", fileContent);
+
+            const tmpDir = "/tmp"; // Update with your actual temporary directory path
+            const files = readdirSync(tmpDir);
+            const filteredFiles = files.filter((fileName) =>
+              fileName.startsWith("Pages_")
+            );
+
+            // Read each file and send it in the response
+            const fileContents = filteredFiles.map((fileName) => {
+              const filePath = path.join(tmpDir, fileName);
+              return {
+                fileName,
+                content: readFileSync(filePath, "utf-8"), // or use 'binary' if the files are binary
+              };
             });
+            console.log("---Pages:", fileContents);
+
+            // Send the files in the response
+            res
+              .status(200)
+              .json({ message: "Screenshots Taken", files: fileContents });
           })
           .screenshots({
             // Will take screens at 20%, 40%, 60% and 80% of the video

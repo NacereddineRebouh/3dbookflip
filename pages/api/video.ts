@@ -14,15 +14,17 @@ import ffmpeg from "fluent-ffmpeg";
 import { createReadStream } from "fs";
 import { Readable } from "stream";
 
-const videoDir = "tmp";
-
+const videoDir = "videos/screens";
+// folder: "../../../../../public/screens",
+console.log("__dirname ", __dirname);
+console.log("__filename", __filename);
 // // Make sure the video directory exists
-// if (!fsSync.existsSync(videoDir)) {
-//   console.log("Creating new dir:");
-//   fsSync.mkdirSync(videoDir, 0o777);
-// } else {
-//   console.log("dir Exists");
-// }
+if (!fsSync.existsSync(videoDir)) {
+  console.log("Creating new dir:");
+  fsSync.mkdirSync(videoDir, 0o777);
+} else {
+  console.log("dir Exists");
+}
 
 export const config = {
   api: {
@@ -110,15 +112,15 @@ async function CallPost(req: NextApiRequest, res: NextApiResponse) {
     console.log("fileName:", fileName);
     // filePath = path.join(process.cwd(), "pages", "staticAssets", fileName);
     // filePath = path.join(videoDir, fileName);
-    filePath = path.join("/tmp", fileName);
+    filePath = path.join("/", fileName);
     // const filePath2 = path.join("/tmp", fileName);
     // filePath = `./${fileName}`;
     // const filePath2 = `./${fileName}`;
-    let writeStream = createWriteStream(`/tmp/${fileName}`);
+    let writeStream = createWriteStream(filePath);
     file.pipe(writeStream);
     writeStream.on("finish", function () {
       //once the doc stream is completed, read the file from the tmp folder
-      const fileContent = readFileSync(`/tmp/${fileName}`);
+      const fileContent = readFileSync(filePath);
       // const b = fileContent.buffer;
       // const stream = Readable.from(fileContent);
       // const fileStream = new Readable();
@@ -130,8 +132,8 @@ async function CallPost(req: NextApiRequest, res: NextApiResponse) {
       console.log("checking if file is saved 0.6", fileContent);
       console.log("checking if file is saved createReadStream", filePath2.path);
       try {
-        console.log("1:", filePath);
-        ffmpeg(filePath2)
+        console.log("1:", fileName);
+        ffmpeg(filePath)
           .on("end", function () {
             console.log("Screenshots taken");
             res.status(200).json({
@@ -143,7 +145,7 @@ async function CallPost(req: NextApiRequest, res: NextApiResponse) {
             timestamps: [1, 1.5, 2, 3, 3.2, 3.6, 3.9, 5],
             // count: 48,
             filename: "Pages_%00i.jpeg",
-            folder: "public/screens",
+            folder: videoDir,
           });
       } catch (error) {
         console.error(error);

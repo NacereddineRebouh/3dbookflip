@@ -1,7 +1,12 @@
 import { NextApiRequest, NextApiResponse } from "next";
 import ytdl from "ytdl-core";
 import { YoutubeTranscript } from "youtube-transcript";
-import fsSync, { createWriteStream, promises as fs, readFileSync } from "fs";
+import fsSync, {
+  createWriteStream,
+  writeFileSync,
+  promises as fs,
+  readFileSync,
+} from "fs";
 import path from "path";
 import busboy from "busboy";
 import url from "url";
@@ -94,7 +99,7 @@ function getFileExtension(fileName: string): string {
   return extensionMatch ? extensionMatch[0] : "";
 }
 
-function CallPost(req: NextApiRequest, res: NextApiResponse) {
+async function CallPost(req: NextApiRequest, res: NextApiResponse) {
   let filePath = "";
   const bb = busboy({ headers: req.headers });
   console.log("file", req.body);
@@ -114,13 +119,19 @@ function CallPost(req: NextApiRequest, res: NextApiResponse) {
     writeStream.on("finish", function () {
       //once the doc stream is completed, read the file from the tmp folder
       const fileContent = readFileSync(`/tmp/${fileName}`);
-      const b = fileContent.buffer;
-      const stream = Readable.from(fileContent);
-      const fileStream = new Readable();
-      fileStream.push(file);
+      // const b = fileContent.buffer;
+      // const stream = Readable.from(fileContent);
+      // const fileStream = new Readable();
+      // fileStream.push(file);
+      const filePath3 = `/tmp/${fileName}`; // Adjust the path
+      const filePath2 = createReadStream(filePath); // Adjust the path
+      // writeFileSync(filePath, fileContent);
+
+      console.log("checking if file is saved 0.6", fileContent);
+      console.log("checking if file is saved createReadStream", filePath2.path);
       try {
         console.log("1:", filePath);
-        ffmpeg(fileStream)
+        ffmpeg(filePath)
           .on("end", function () {
             console.log("Screenshots taken");
             res.status(200).json({
@@ -129,6 +140,7 @@ function CallPost(req: NextApiRequest, res: NextApiResponse) {
           })
           .screenshots({
             // Will take screens at 20%, 40%, 60% and 80% of the video
+            // timestamps: [],
             count: 48,
             filename: "Pages_%00i.jpeg",
             folder: "./public/screens",

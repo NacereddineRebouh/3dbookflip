@@ -200,12 +200,17 @@ export const GetTextures = (nodesArray: any, offset: number) => {
   const Pages: THREE.Texture[] = [];
 
   new Array(8).fill(0).map((value, index) => {
-    const texture = new THREE.TextureLoader().load(
+    const textureLoader = new THREE.TextureLoader();
+
+    textureLoader.requestHeader = {
+      "Cache-Control": "no-cache, no-store, must-revalidate",
+    };
+    const texture = textureLoader.load(
       `./screens/Pages_${String(offset + index + 1).padStart(3, "0")}.jpeg`
     );
     // console.log(texture);
     texture.flipY = false;
-    texture.encoding = THREE.sRGBEncoding;
+    texture.colorSpace = THREE.SRGBColorSpace;
     texture.needsUpdate = true;
     Pages.push(texture);
   });

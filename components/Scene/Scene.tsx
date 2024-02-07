@@ -26,6 +26,7 @@ import { Pages_032 } from "./Pages_032";
 import { Pages_040 } from "./Pages_040";
 import Environement from "./Environment";
 import axios, { AxiosProgressEvent, AxiosRequestConfig } from "axios";
+import FormData from "form-data";
 type Props = {
   Video: File | null;
   setUploaded: Dispatch<SetStateAction<boolean | null>>;
@@ -68,7 +69,8 @@ export default function Scene({ Video, setUploaded, setPercentage }: Props) {
 
           const config: AxiosRequestConfig = {
             headers: {
-              "Content-Type": "multipart/form-data",
+              // "Content-Type": "multipart/form-data",
+              ...data.getHeaders(),
             },
             onUploadProgress: function (progressEvent) {
               if (progressEvent.total) {

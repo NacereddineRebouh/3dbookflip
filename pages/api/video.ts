@@ -143,7 +143,7 @@ async function CallPost(req: NextApiRequest, res: NextApiResponse) {
             timestamps: [1, 1.5, 2, 3, 3.2, 3.6, 3.9, 5],
             // count: 48,
             filename: "Pages_%00i.jpeg",
-            folder: "./public/screens",
+            folder: "/tmp/screens",
           });
       } catch (error) {
         console.error(error);

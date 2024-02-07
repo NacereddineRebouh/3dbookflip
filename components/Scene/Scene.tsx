@@ -84,7 +84,7 @@ export default function Scene({ Video, setUploaded, setPercentage }: Props) {
           // console.log(data);
           const res = await axios.post("/api/video", data, config);
 
-          // console.log("File uploaded successfully", res);
+          console.log("File uploaded successfully", res.data);
 
           if (res.status == 200) {
             setImagesReady(true);

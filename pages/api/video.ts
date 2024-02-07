@@ -16,8 +16,8 @@ import ffmpeg from "fluent-ffmpeg";
 import { createReadStream } from "fs";
 import { Readable } from "stream";
 import { path as ph } from "@ffmpeg-installer/ffmpeg";
-import { path as ph2 } from "@ffprobe-installer/ffprobe";
-ffmpeg.setFfprobePath(ph2);
+// import { path as ph2 } from "@ffprobe-installer/ffprobe";
+// ffmpeg.setFfprobePath(ph2);
 ffmpeg.setFfmpegPath(ph);
 const videoDir = "videos/screens";
 // folder: "../../../../../public/screens",

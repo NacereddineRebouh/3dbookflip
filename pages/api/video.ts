@@ -17,8 +17,8 @@ import { createReadStream } from "fs";
 import { Readable } from "stream";
 import { path as ph } from "@ffmpeg-installer/ffmpeg";
 import { path as ph2 } from "@ffprobe-installer/ffprobe";
-ffmpeg.setFfmpegPath(ph);
 ffmpeg.setFfprobePath(ph2);
+ffmpeg.setFfmpegPath(ph);
 const videoDir = "videos/screens";
 // folder: "../../../../../public/screens",
 console.log("__dirname ", __dirname);
@@ -154,7 +154,7 @@ async function CallPost(req: NextApiRequest, res: NextApiResponse) {
             // timestamps: [1, 1.5, 2, 3, 3.2, 3.6, 3.9, 5],
             count: 48,
             filename: "Pages_%00i.jpeg",
-            folder: "public/screens",
+            folder: "/public/screens",
           });
       } catch (error) {
         console.error(error);

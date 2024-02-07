@@ -9,6 +9,7 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@ffprobe-installer/ffprobe": "^2.1.2",
     "@react-three/drei": "^9.97.0",
     "@react-three/fiber": "^8.15.16",
     "@types/three": "^0.161.2",

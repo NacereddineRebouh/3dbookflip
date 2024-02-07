@@ -145,6 +145,8 @@ async function CallPost(req: NextApiRequest, res: NextApiResponse) {
             console.log("Screenshots taken");
             const files = readdirSync("/tmp");
             console.log("files:", files);
+            const fileContent = readFileSync("/tmp/Pages_001?jpeg");
+            console.log("---fileContent:", fileContent);
             res.status(200).json({
               message: "Screenshots Taken",
             });

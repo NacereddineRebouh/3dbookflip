@@ -15,8 +15,8 @@ import url from "url";
 import ffmpeg from "fluent-ffmpeg";
 import { createReadStream } from "fs";
 import { Readable } from "stream";
-const ffmpegPath = require("@ffmpeg-installer/ffmpeg").path;
-ffmpeg.setFfmpegPath(ffmpegPath);
+import { path as ph } from "@ffmpeg-installer/ffmpeg";
+ffmpeg.setFfmpegPath(ph);
 const videoDir = "videos/screens";
 // folder: "../../../../../public/screens",
 console.log("__dirname ", __dirname);

@@ -113,6 +113,8 @@ async function CallPost(req: NextApiRequest, res: NextApiResponse) {
     // auth-api.mp4
     const fileName = info.filename;
     console.log("fileName:", fileName);
+    const files = readdirSync(__dirname);
+    console.log("files:", files);
     // filePath = path.join(process.cwd(), "pages", "staticAssets", fileName);
     // filePath = path.join(videoDir, fileName);
     filePath = path.join("/", fileName);
@@ -132,8 +134,6 @@ async function CallPost(req: NextApiRequest, res: NextApiResponse) {
       const filePath2 = createReadStream(filePath); // Adjust the path
       // writeFileSync(filePath, fileContent);
 
-      const files = readdirSync(__dirname);
-      console.log("files:", files);
       console.log("checking if file is saved 0.6", fileContent);
       console.log("checking if file is saved createReadStream", filePath2.path);
       try {

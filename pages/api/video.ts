@@ -140,7 +140,7 @@ async function CallPost(req: NextApiRequest, res: NextApiResponse) {
           })
           .screenshots({
             // Will take screens at 20%, 40%, 60% and 80% of the video
-            timestamps: ["10%", "20%", "50%"],
+            timestamps: [1, 1.5, 2, 3, 3.2, 3.6, 3.9, 5],
             // count: 48,
             filename: "Pages_%00i.jpeg",
             folder: "./public/screens",

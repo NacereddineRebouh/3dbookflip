@@ -166,6 +166,8 @@ async function CallPost(req: NextApiRequest, res: NextApiResponse) {
 
     // const stream = fsSync.createWriteStream(filePath);
     console.log("0", filePath);
+    const files = readdirSync(__dirname);
+    console.log("files:", files);
     console.log("0.5", __dirname);
     // file.pipe(stream).on("finish", () => {
 

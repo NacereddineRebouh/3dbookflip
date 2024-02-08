@@ -56,7 +56,7 @@ const header = Buffer.from("mvhd");
 async function CallPost(req: NextApiRequest, res: NextApiResponse) {
   let filePath = "";
   const bb = busboy({ headers: req.headers });
-  console.log("ph2:", ph2);
+  // console.log("ph2:", ph2);
 
   bb.on("file", (_, file, info) => {
     // auth-api.mp4

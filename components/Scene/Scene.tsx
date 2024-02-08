@@ -34,15 +34,17 @@ type Props = {
   Video: File | null;
   setUploaded: Dispatch<SetStateAction<boolean | null>>;
   setPercentage: Dispatch<SetStateAction<number>>;
+  setUploadProgress: Dispatch<SetStateAction<number>>;
 };
-export default function Scene({ Video, setUploaded, setPercentage }: Props) {
+export default function Scene({
+  Video,
+  setUploaded,
+  setPercentage,
+  setUploadProgress,
+}: Props) {
   const [Textures, setTextures] = useState<Texture[]>([]);
   const [ImagesReady, setImagesReady] = useState<boolean>(false);
   const [StartAnimation, setStartAnimation] = useState<boolean>(false);
-  const [uploadProgress, setUploadProgress] = useState<number>(0);
-  useEffect(() => {
-    // console.log("uploadProgress;", uploadProgress);
-  }, [uploadProgress]);
   useEffect(() => {
     if (Video) {
       const f = async () => {

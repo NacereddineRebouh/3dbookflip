@@ -5,9 +5,14 @@ import React, { Dispatch, SetStateAction, useEffect, useState } from "react";
 type Props = {
   setVideo: Dispatch<SetStateAction<File | null>>;
   Uploaded: boolean | null;
+  uploadProgress: number;
 };
 
-export default function VideUploadButton({ setVideo, Uploaded = null }: Props) {
+export default function VideUploadButton({
+  uploadProgress,
+  setVideo,
+  Uploaded = null,
+}: Props) {
   const [uploadStatus, setUploadStatus] = useState("");
   useEffect(() => {
     if (Uploaded) {
@@ -61,6 +66,7 @@ export default function VideUploadButton({ setVideo, Uploaded = null }: Props) {
           </svg>
           <span className="text-gray-600 font-medium">
             {uploadStatus || "Upload file"}
+            {uploadStatus == "Uploading..." ? " " + uploadProgress : ""}
           </span>
         </label>
         <input

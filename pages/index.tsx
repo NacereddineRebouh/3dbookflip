@@ -13,6 +13,8 @@ export default function Home() {
   const [Uploaded, setUploaded] = useState<boolean | null>(null);
   const [percentage, setPercentage] = useState<number>(0);
   const [Loaded, setLoaded] = useState<boolean>(false);
+  const [uploadProgress, setUploadProgress] = useState<number>(0);
+
   return (
     <main className="bg-orange-300 flex h-full min-h-screen min-w-full p-0">
       <AnimatePresence mode="wait">
@@ -20,8 +22,13 @@ export default function Home() {
           <LoadingScreen percentage={percentage} setLoaded={setLoaded} />
         )}
       </AnimatePresence>
-      <VideUploadButton Uploaded={Uploaded} setVideo={setVideo} />
+      <VideUploadButton
+        uploadProgress={uploadProgress}
+        Uploaded={Uploaded}
+        setVideo={setVideo}
+      />
       <Scene
+        setUploadProgress={setUploadProgress}
         setPercentage={setPercentage}
         Video={Video}
         setUploaded={setUploaded}

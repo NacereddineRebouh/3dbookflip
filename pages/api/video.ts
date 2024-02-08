@@ -17,9 +17,9 @@ import { createReadStream } from "fs";
 import { path as ph } from "@ffmpeg-installer/ffmpeg";
 import { path as ph2 } from "@ffprobe-installer/ffprobe";
 import { PutObjectCommand, S3Client } from "@aws-sdk/client-s3";
-import getVideoDurationInSeconds from "get-video-duration";
+// import getVideoDurationInSeconds from "get-video-duration";
 ffmpeg.setFfmpegPath(ph);
-ffmpeg.setFfprobePath(ph2);
+// ffmpeg.setFfprobePath(ph2);
 
 export const config = {
   api: {

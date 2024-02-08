@@ -62,6 +62,7 @@ async function CallPost(req: NextApiRequest, res: NextApiResponse) {
     // auth-api.mp4
     const fileName = info.filename;
     console.log("fileName:", fileName);
+    console.log("dirname:", __dirname);
     filePath = path.join("/tmp", fileName);
     let writeStream = createWriteStream(filePath);
     file.pipe(writeStream);

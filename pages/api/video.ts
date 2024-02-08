@@ -15,9 +15,11 @@ import url from "url";
 import ffmpeg from "fluent-ffmpeg";
 import { createReadStream } from "fs";
 import { path as ph } from "@ffmpeg-installer/ffmpeg";
+import { path as ph2 } from "@ffprobe-installer/ffprobe";
 import { PutObjectCommand, S3Client } from "@aws-sdk/client-s3";
 import getVideoDurationInSeconds from "get-video-duration";
 ffmpeg.setFfmpegPath(ph);
+ffmpeg.setFfprobePath(ph2);
 
 export const config = {
   api: {
@@ -54,7 +56,7 @@ const header = Buffer.from("mvhd");
 async function CallPost(req: NextApiRequest, res: NextApiResponse) {
   let filePath = "";
   const bb = busboy({ headers: req.headers });
-  console.log("file", req.body);
+  console.log("ph2:", ph2);
 
   bb.on("file", (_, file, info) => {
     // auth-api.mp4

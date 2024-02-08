@@ -70,7 +70,7 @@ async function CallPost(req: NextApiRequest, res: NextApiResponse) {
       const files = readdirSync(__dirname);
       console.log("files:", files);
       const filePath2 = createReadStream(filePath);
-      const dur = await getVideoDurationInSeconds(filePath2);
+      // const dur = await getVideoDurationInSeconds(filePath2);
       const file = await fs.open(filePath, "r");
       const { buffer } = await file.read(buff, 0, 100, 0);
 
@@ -84,8 +84,8 @@ async function CallPost(req: NextApiRequest, res: NextApiResponse) {
       console.log(length);
       const duration = Math.floor((length / timeScale) * 1000) / 1000;
       console.log(duration);
-      console.log("new dur", dur);
-      const timestamps = calculateTimestamps(dur, 48);
+      console.log("new dur", duration);
+      const timestamps = calculateTimestamps(duration, 48);
       console.log("timestamps", timestamps);
       try {
         console.log("1:", fileName);

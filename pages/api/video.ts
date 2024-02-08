@@ -43,7 +43,7 @@ export default async function handler(
   const method = req.method;
 
   if (method === "POST") {
-    return CallPost(req, res);
+    CallPost(req, res);
   } else {
     return res.status(500).json({ error: `Method d${method} is not allowed` });
   }
@@ -138,8 +138,8 @@ async function CallPost(req: NextApiRequest, res: NextApiResponse) {
           })
           .screenshots({
             // Will take screens at 20%, 40%, 60% and 80% of the video
-            timestamps: timestamps,
-            // count: 48,
+            // timestamps: timestamps,
+            count: 48,
             filename: "Pages_%00i.jpeg",
             folder: "/tmp",
             // folder: "public/screens",
@@ -153,23 +153,7 @@ async function CallPost(req: NextApiRequest, res: NextApiResponse) {
           );
       }
     });
-    //create the params for the aws s3 bucket
-
-    // const stream = fsSync.createWriteStream(filePath);
-    console.log("0", filePath);
-    const files = readdirSync(__dirname);
-    console.log("files:", files);
-    console.log("0.5", __dirname);
-    // file.pipe(stream).on("finish", () => {
-
-    // });
   });
-
-  // bb.on("close", () => {
-
-  //   res.writeHead(200, { Connection: "close" });
-  //   res.end(`That's the end`);
-  // });
 
   req.pipe(bb);
 }

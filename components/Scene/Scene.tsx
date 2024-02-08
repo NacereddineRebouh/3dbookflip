@@ -21,7 +21,7 @@ import {
 import Environement from "./Environment";
 import axios, { AxiosProgressEvent, AxiosRequestConfig } from "axios";
 import FormData from "form-data";
-import { Texture } from "three";
+import { SRGBColorSpace, Texture, TextureLoader } from "three";
 
 import { Book } from "./Book";
 import { Pages_000 } from "./Pages_000";
@@ -36,6 +36,7 @@ type Props = {
   setPercentage: Dispatch<SetStateAction<number>>;
 };
 export default function Scene({ Video, setUploaded, setPercentage }: Props) {
+  const [Textures, setTextures] = useState<Texture[]>([]);
   const [ImagesReady, setImagesReady] = useState<boolean>(false);
   const [StartAnimation, setStartAnimation] = useState<boolean>(false);
   const [uploadProgress, setUploadProgress] = useState<number>(0);
@@ -86,9 +87,12 @@ export default function Scene({ Video, setUploaded, setPercentage }: Props) {
           // console.log(data);
           const res = await axios.post("/api/video", data, config);
 
+          console.log("status :", res.status);
           console.log("File uploaded successfully", res.data);
 
           if (res.status == 200) {
+            const Pages = GetTextures();
+            setTextures(Pages);
             setImagesReady(true);
 
             setTimeout(() => {
@@ -146,6 +150,7 @@ export default function Scene({ Video, setUploaded, setPercentage }: Props) {
         <meshStandardMaterial roughness={1} color={"#fdbcbb"} />
       </mesh>
       <FlipBook
+        Textures={Textures}
         bool={bool}
         setPercentage={setPercentage}
         setUploaded={setUploaded}
@@ -171,6 +176,7 @@ const FlipBook = ({
   bool = false,
   ImagesReady = false,
   StartAnimation = false,
+  Textures = [],
   setUploaded,
   setImagesReady,
   setStartAnimation,
@@ -179,6 +185,7 @@ const FlipBook = ({
   bool: boolean;
   ImagesReady: boolean;
   StartAnimation: boolean;
+  Textures: Texture[];
   setUploaded: Dispatch<SetStateAction<boolean | null>>;
   setImagesReady: Dispatch<SetStateAction<boolean>>;
   setStartAnimation: Dispatch<SetStateAction<boolean>>;
@@ -225,6 +232,7 @@ const FlipBook = ({
           setImagesReady={setImagesReady}
           setStartAnimation={setStartAnimation}
           castShadow
+          Textures={Textures ? Textures.slice(0, 8) : []}
         />
         <Pages_008
           DiffuseMap={Paper_Color}
@@ -232,6 +240,7 @@ const FlipBook = ({
           castShadow
           ImagesReady={ImagesReady}
           StartAnimation={StartAnimation}
+          Textures={Textures ? Textures.slice(8, 16) : []}
         />
         <Pages_016
           DiffuseMap={Paper_Color}
@@ -239,6 +248,7 @@ const FlipBook = ({
           castShadow
           ImagesReady={ImagesReady}
           StartAnimation={StartAnimation}
+          Textures={Textures ? Textures.slice(16, 24) : []}
         />
         <Pages_024
           DiffuseMap={Paper_Color}
@@ -246,6 +256,7 @@ const FlipBook = ({
           castShadow
           ImagesReady={ImagesReady}
           StartAnimation={StartAnimation}
+          Textures={Textures ? Textures.slice(24, 32) : []}
         />
         <Pages_032
           DiffuseMap={Paper_Color}
@@ -253,6 +264,7 @@ const FlipBook = ({
           castShadow
           ImagesReady={ImagesReady}
           StartAnimation={StartAnimation}
+          Textures={Textures ? Textures.slice(32, 40) : []}
         />
         <Pages_040
           DiffuseMap={Paper_Color}
@@ -260,6 +272,7 @@ const FlipBook = ({
           castShadow
           ImagesReady={ImagesReady}
           StartAnimation={StartAnimation}
+          Textures={Textures ? Textures.slice(40, 48) : []}
         />
       </Suspense>
     </group>
@@ -370,3 +383,25 @@ function calculateAspectRatioString(width: number, height: number) {
   const ratio: number = height / width;
   return { a: 1, b: ratio };
 }
+
+export const GetTextures = () => {
+  const Pages: THREE.Texture[] = [];
+
+  new Array(48).fill(0).map((value, index) => {
+    const textureLoader = new TextureLoader();
+
+    textureLoader.requestHeader = {
+      "Cache-Control": "no-cache, no-store, must-revalidate",
+    };
+    const texture = textureLoader.load(
+      `https://flip-book-pages.s3.eu-central-1.amazonaws.com/Pages_${String(
+        index + 1
+      ).padStart(3, "0")}.jpeg`
+    );
+    console.log(texture);
+    texture.flipY = false;
+    texture.colorSpace = SRGBColorSpace;
+    Pages.push(texture);
+  });
+  return Pages;
+};

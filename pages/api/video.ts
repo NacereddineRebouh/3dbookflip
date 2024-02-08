@@ -16,6 +16,7 @@ import ffmpeg from "fluent-ffmpeg";
 import { createReadStream } from "fs";
 import { path as ph } from "@ffmpeg-installer/ffmpeg";
 import { PutObjectCommand, S3Client } from "@aws-sdk/client-s3";
+import getVideoDurationInSeconds from "get-video-duration";
 ffmpeg.setFfmpegPath(ph);
 
 export const config = {
@@ -24,10 +25,10 @@ export const config = {
   },
 };
 const s3Client = new S3Client({
-  region: process.env.NEXT_PUBLIC_AWS_S3_REGION as string,
+  region: process.env.AWS_S3_REGION as string,
   credentials: {
-    accessKeyId: process.env.NEXT_PUBLIC_AWS_S3_ACCESS_KEY_ID as string,
-    secretAccessKey: process.env.NEXT_PUBLIC_AWS_S3_SECRET_ACCESS_KEY as string,
+    accessKeyId: process.env.AWS_S3_ACCESS_KEY_ID as string,
+    secretAccessKey: process.env.AWS_S3_SECRET_ACCESS_KEY as string,
   },
 });
 export default async function handler(
@@ -48,6 +49,8 @@ function getFileExtension(fileName: string): string {
   return extensionMatch ? extensionMatch[0] : "";
 }
 
+const buff = Buffer.alloc(100);
+const header = Buffer.from("mvhd");
 async function CallPost(req: NextApiRequest, res: NextApiResponse) {
   let filePath = "";
   const bb = busboy({ headers: req.headers });
@@ -64,14 +67,24 @@ async function CallPost(req: NextApiRequest, res: NextApiResponse) {
       //once the doc stream is completed, read the file from the tmp folder
       const files = readdirSync(__dirname);
       console.log("files:", files);
-      const fileContent = readFileSync(filePath);
-      const filePath3 = `/tmp/${fileName}`; // Adjust the path
-      const filePath2 = createReadStream(filePath); // Adjust the path
-      // writeFileSync(filePath, fileContent);
+      const filePath2 = createReadStream(filePath);
+      const dur = await getVideoDurationInSeconds(filePath2);
+      const file = await fs.open(filePath, "r");
+      const { buffer } = await file.read(buff, 0, 100, 0);
 
-      console.log("checking if file is saved 0.6", fileContent);
-      console.log("checking if file is saved createReadStream", filePath2.path);
-      const Files = [];
+      await file.close();
+
+      const start = buffer.indexOf(header) + 17;
+      const timeScale = buffer.readUInt32BE(start);
+      const length = buffer.readUInt32BE(start + 4);
+      console.log(start);
+      console.log(timeScale);
+      console.log(length);
+      const duration = Math.floor((length / timeScale) * 1000) / 1000;
+      console.log(duration);
+      console.log("new dur", dur);
+      const timestamps = calculateTimestamps(dur, 48);
+      console.log("timestamps", timestamps);
       try {
         console.log("1:", fileName);
         ffmpeg(filePath)
@@ -82,22 +95,45 @@ async function CallPost(req: NextApiRequest, res: NextApiResponse) {
 
             const tmpDir = "/tmp"; // Update with your actual temporary directory path
             const files = readdirSync(tmpDir);
+            console.log("savefd images in tmp,", files);
             const filteredFiles = files.filter((fileName) =>
               fileName.startsWith("Pages_")
             );
-            const fileContents = uploadToS3({ filteredFiles: filteredFiles });
-            console.log("Done:", fileContents);
-            res
-              .status(200)
-              .json({ message: "Screenshots Taken", files: fileContents });
+            console.log("Will uploadPromises....", filteredFiles);
+            const uploadPromises = filteredFiles.map(async (file) => {
+              const filePath = path.join(tmpDir, file);
+              console.log("Uplaoding ....", filePath);
+              const fileData = readFileSync(filePath);
+              const params = {
+                Bucket: process.env.AWS_S3_BUCKET_NAME,
+                Key: `${file}`,
+                Body: fileData,
+              };
+
+              const command = new PutObjectCommand(params);
+              await s3Client.send(command);
+              return { file };
+            });
+            console.log("await uploadPromises....");
+
+            await Promise.all(uploadPromises)
+              .then((v) => {
+                console.log("-1.Done:", v);
+                res
+                  .status(200)
+                  .json({ message: "Screenshots Taken", files: v });
+              })
+              .catch((err) => {
+                res.status(500).json({ message: "Upload problem" });
+              });
           })
           .screenshots({
             // Will take screens at 20%, 40%, 60% and 80% of the video
-            timestamps: [1, 1.5, 2, 3, 3.2, 3.6, 3.9, 5],
+            timestamps: timestamps,
             // count: 48,
             filename: "Pages_%00i.jpeg",
             folder: "/tmp",
-            // folder: "/public/screens",
+            // folder: "public/screens",
           });
       } catch (error) {
         console.error(error);
@@ -129,29 +165,6 @@ async function CallPost(req: NextApiRequest, res: NextApiResponse) {
   req.pipe(bb);
 }
 
-const uploadToS3 = async ({
-  filteredFiles = [],
-}: {
-  filteredFiles: string[];
-}) => {
-  // Read each file and send it in the response
-  const tmpDir = "/tmp";
-  const files = await filteredFiles.map(async (fileName) => {
-    const filePath = path.join(tmpDir, fileName);
-    const fileData = readFileSync(filePath, "utf-8");
-
-    const params = {
-      Bucket: process.env.AWS_S3_BUCKET_NAME,
-      Key: `${fileName}`,
-      Body: fileData,
-    };
-
-    const command = new PutObjectCommand(params);
-    await s3Client.send(command);
-    return { fileName };
-  });
-  return files;
-};
 // async function CallPost(req: NextApiRequest, res: NextApiResponse) {
 //   let filePath = "";
 //   const bb = busboy({ headers: req.headers });
@@ -252,3 +265,12 @@ const uploadToS3 = async ({
 
 //   req.pipe(bb);
 // }
+
+function calculateTimestamps(duration: number, numberOfCuts: number) {
+  const interval = duration / numberOfCuts;
+  const timestamps = [];
+  for (let i = 0; i <= numberOfCuts; i++) {
+    timestamps.push(interval * i);
+  }
+  return timestamps;
+}

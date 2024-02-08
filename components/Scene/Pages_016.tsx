@@ -49,6 +49,7 @@ type propsBook = JSX.IntrinsicElements["group"] & {
   BumpMap: THREE.Texture;
   StartAnimation: Boolean;
   ImagesReady: Boolean;
+  Textures: THREE.Texture[];
 };
 export function Pages_016(props: propsBook) {
   const group = useRef<THREE.Group>(null);
@@ -65,7 +66,7 @@ export function Pages_016(props: propsBook) {
 
   useEffect(() => {
     if (props.ImagesReady) {
-      const Pages = GetTextures(nodesArray, 16);
+      const Pages = props.Textures;
       const mt: THREE.MeshStandardMaterial[] = [];
       Materials.map((material, index) => {
         const mat = material.clone();

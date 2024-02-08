@@ -53,6 +53,7 @@ type propsBook = JSX.IntrinsicElements["group"] & {
   BumpMap: THREE.Texture;
   StartAnimation: Boolean;
   ImagesReady: Boolean;
+  Textures: THREE.Texture[];
   setUploaded: Dispatch<SetStateAction<boolean | null>>;
   setImagesReady: Dispatch<SetStateAction<boolean>>;
   setStartAnimation: Dispatch<SetStateAction<boolean>>;
@@ -73,8 +74,9 @@ export function Pages_000(props: propsBook) {
     useState<THREE.MeshStandardMaterial[]>(materialsArray); // Assuming image exists by default
 
   useEffect(() => {
-    if (props.ImagesReady) {
-      const Pages = GetTextures(nodesArray, 0);
+    if (props.ImagesReady && props.Textures) {
+      const Pages = props.Textures;
+      // const Pages = GetTextures(nodesArray, 0);
       const mt: THREE.MeshStandardMaterial[] = [];
       Materials.map((material, index) => {
         const mat = material.clone();
@@ -127,70 +129,6 @@ export function Pages_000(props: propsBook) {
             />
           );
         })}
-        {/* <mesh
-          castShadow
-          name="Pages_000"
-          geometry={nodes.Pages_000.geometry}
-          material={materials["Opaline Paper"]}
-          morphTargetDictionary={nodes.Pages_000.morphTargetDictionary}
-          morphTargetInfluences={nodes.Pages_000.morphTargetInfluences}
-        />
-        <mesh
-          castShadow
-          name="Pages_001"
-          geometry={nodes.Pages_001.geometry}
-          material={materials["Opaline Paper"]}
-          morphTargetDictionary={nodes.Pages_001.morphTargetDictionary}
-          morphTargetInfluences={nodes.Pages_001.morphTargetInfluences}
-        />
-        <mesh
-          castShadow
-          name="Pages_002"
-          geometry={nodes.Pages_002.geometry}
-          material={materials["Opaline Paper"]}
-          morphTargetDictionary={nodes.Pages_002.morphTargetDictionary}
-          morphTargetInfluences={nodes.Pages_002.morphTargetInfluences}
-        />
-        <mesh
-          castShadow
-          name="Pages_003"
-          geometry={nodes.Pages_003.geometry}
-          material={materials["Opaline Paper"]}
-          morphTargetDictionary={nodes.Pages_003.morphTargetDictionary}
-          morphTargetInfluences={nodes.Pages_003.morphTargetInfluences}
-        />
-        <mesh
-          castShadow
-          name="Pages_004"
-          geometry={nodes.Pages_004.geometry}
-          material={materials["Opaline Paper"]}
-          morphTargetDictionary={nodes.Pages_004.morphTargetDictionary}
-          morphTargetInfluences={nodes.Pages_004.morphTargetInfluences}
-        />
-        <mesh
-          castShadow
-          name="Pages_005"
-          geometry={nodes.Pages_005.geometry}
-          material={materials["Opaline Paper"]}
-          morphTargetDictionary={nodes.Pages_005.morphTargetDictionary}
-          morphTargetInfluences={nodes.Pages_005.morphTargetInfluences}
-        />
-        <mesh
-          castShadow
-          name="Pages_006"
-          geometry={nodes.Pages_006.geometry}
-          material={materials["Opaline Paper"]}
-          morphTargetDictionary={nodes.Pages_006.morphTargetDictionary}
-          morphTargetInfluences={nodes.Pages_006.morphTargetInfluences}
-        />
-        <mesh
-          castShadow
-          name="Pages_007"
-          geometry={nodes.Pages_007.geometry}
-          material={materials["Opaline Paper"]}
-          morphTargetDictionary={nodes.Pages_007.morphTargetDictionary}
-          morphTargetInfluences={nodes.Pages_007.morphTargetInfluences}
-        /> */}
       </group>
     </group>
   );

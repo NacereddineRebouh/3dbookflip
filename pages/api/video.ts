@@ -15,10 +15,13 @@ import url from "url";
 import ffmpeg from "fluent-ffmpeg";
 import { createReadStream } from "fs";
 import { path as ph } from "@ffmpeg-installer/ffmpeg";
-import { path as ph2 } from "@ffprobe-installer/ffprobe";
+// import { path as ph2 } from "@ffprobe-installer/ffprobe";
+import ffprobe from "ffprobe-static";
+console.log(ffprobe.path);
 import { PutObjectCommand, S3Client } from "@aws-sdk/client-s3";
 // import getVideoDurationInSeconds from "get-video-duration";
 ffmpeg.setFfmpegPath(ph);
+ffmpeg.setFfprobePath(ffprobe.path);
 // ffmpeg.setFfprobePath(ph2);
 
 export const config = {
@@ -77,6 +80,7 @@ async function CallPost(req: NextApiRequest, res: NextApiResponse) {
 
       await file.close();
 
+      console.log(buffer);
       const start = buffer.indexOf(header) + 17;
       const timeScale = buffer.readUInt32BE(start);
       const length = buffer.readUInt32BE(start + 4);
@@ -88,6 +92,8 @@ async function CallPost(req: NextApiRequest, res: NextApiResponse) {
       console.log("new dur", duration);
       const timestamps = calculateTimestamps(duration, 48);
       console.log("timestamps", timestamps);
+      const ff = readdirSync("/var/task/");
+      console.log("dir in ff,", ff);
       try {
         console.log("1:", fileName);
         ffmpeg(filePath)

@@ -182,11 +182,8 @@ const FlipBook = ({
   const { progress, loaded, total } = useProgress();
   // const dispatch = useAppDispatch();
   // // ------- //
-
-  console.log(loaded);
   useEffect(() => {
     const value = ((loaded / 21) * 100).toFixed(0) as unknown as number;
-    console.log(total);
     setPercentage(value);
   }, [progress, loaded, total]);
   return (

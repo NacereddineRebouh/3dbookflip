@@ -59,4 +59,4 @@ export function Animation_Controllers(props: propsBook) {
   );
 }
 
-useGLTF.preload("/Models/New/Animation_Controllers.glb");
+//useGLTF.preload("/Models/New/Animation_Controllers.glb");

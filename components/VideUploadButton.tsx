@@ -34,7 +34,6 @@ export default function VideUploadButton({
         setVideo(selectedFile);
         // Simulating upload process (replace with your actual upload logic)
         setUploadStatus("Uploading...");
-        // console.log(selectedFile);
       }
     }
   };

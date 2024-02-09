@@ -66,4 +66,4 @@ export function Book(props: propsBook) {
   );
 }
 
-useGLTF.preload("/Models/New/Book2.glb");
+//useGLTF.preload("/Models/New/Book2.glb");

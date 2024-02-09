@@ -12,12 +12,12 @@ type GLTFResult = GLTF & {
   nodes: {
     Plane_008: THREE.Mesh;
     Plane_008_1: THREE.Mesh;
-    Plane_011: THREE.Mesh;
-    Plane_011_1: THREE.Mesh;
     Plane_009: THREE.Mesh;
     Plane_009_1: THREE.Mesh;
     Plane_010: THREE.Mesh;
     Plane_010_1: THREE.Mesh;
+    Plane_011: THREE.Mesh;
+    Plane_011_1: THREE.Mesh;
     Plane_012: THREE.Mesh;
     Plane_012_1: THREE.Mesh;
     Plane_013: THREE.Mesh;
@@ -69,6 +69,7 @@ export function Pages_008(props: propsBook) {
     }
     return false;
   });
+  nodesArray.sort((a, b) => a[0].localeCompare(b[0]));
   materials["Opaline Paper"].color = new THREE.Color("white");
   materials["Opaline Paper"].map = props.DiffuseMap;
   materials["Opaline Paper"].map.flipY = false;
@@ -177,4 +178,4 @@ export function Pages_008(props: propsBook) {
   );
 }
 
-useGLTF.preload("/Models/New/Pages_008.glb");
+//useGLTF.preload("/Models/New/Pages_008.glb");

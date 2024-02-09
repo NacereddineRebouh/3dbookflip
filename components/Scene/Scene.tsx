@@ -17,14 +17,14 @@ import axios, { AxiosProgressEvent, AxiosRequestConfig } from "axios";
 import FormData from "form-data";
 import { SRGBColorSpace, Texture, TextureLoader } from "three";
 
-import { Pages_008 as Pages_8 } from "@/components/Scene/New/Pages_008";
-import { Pages_000 as Pages_0 } from "@/components/Scene/New/Pages_000";
-import { Pages_16 } from "@/components/Scene/New/Pages_016";
 import { Pages_24 } from "./New/Pages_024";
 import { Pages_32 } from "./New/Pages_032";
 import { Pages_40 } from "./New/Pages_040";
 import { Animation_Controllers } from "./New/Animation_Controllers";
 import { Book } from "./New/Book2";
+import { Pages_16 } from "./New/Pages_016";
+import { Pages_000 } from "./New/Pages_000";
+import { Pages_008 } from "./New/Pages_008";
 type Props = {
   Video: File | null;
   setUploaded: Dispatch<SetStateAction<boolean | null>>;
@@ -201,7 +201,7 @@ const FlipBook = ({
           StartAnimation={StartAnimation}
         />
         <Suspense fallback={null}>
-          <Pages_0
+          <Pages_000
             DiffuseMap={Paper_Color}
             BumpMap={Paper_Bump}
             ImagesReady={ImagesReady}
@@ -212,7 +212,7 @@ const FlipBook = ({
             castShadow
             Textures={Textures ? Textures.slice(0, 8) : []}
           />
-          <Pages_8
+          <Pages_008
             DiffuseMap={Paper_Color}
             BumpMap={Paper_Bump}
             ImagesReady={ImagesReady}

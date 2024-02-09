@@ -17,12 +17,12 @@ import axios, { AxiosProgressEvent, AxiosRequestConfig } from "axios";
 import FormData from "form-data";
 import { SRGBColorSpace, Texture, TextureLoader } from "three";
 
-import { Pages_24 } from "./New/Pages_024";
-import { Pages_32 } from "./New/Pages_032";
-import { Pages_40 } from "./New/Pages_040";
+import { Pages_024 } from "./New/Pages_024";
+import { Pages_032 } from "./New/Pages_032";
+import { Pages_040 } from "./New/Pages_040";
 import { Animation_Controllers } from "./New/Animation_Controllers";
 import { Book } from "./New/Book2";
-import { Pages_16 } from "./New/Pages_016";
+import { Pages_016 } from "./New/Pages_016";
 import { Pages_000 } from "./New/Pages_000";
 import { Pages_008 } from "./New/Pages_008";
 type Props = {
@@ -220,7 +220,7 @@ const FlipBook = ({
             castShadow
             Textures={Textures ? Textures.slice(8, 16) : []}
           />
-          <Pages_16
+          <Pages_016
             DiffuseMap={Paper_Color}
             BumpMap={Paper_Bump}
             ImagesReady={ImagesReady}
@@ -228,7 +228,7 @@ const FlipBook = ({
             castShadow
             Textures={Textures ? Textures.slice(16, 24) : []}
           />
-          <Pages_24
+          <Pages_024
             DiffuseMap={Paper_Color}
             BumpMap={Paper_Bump}
             ImagesReady={ImagesReady}
@@ -236,7 +236,7 @@ const FlipBook = ({
             castShadow
             Textures={Textures ? Textures.slice(24, 32) : []}
           />
-          <Pages_32
+          <Pages_032
             DiffuseMap={Paper_Color}
             BumpMap={Paper_Bump}
             ImagesReady={ImagesReady}
@@ -244,7 +244,7 @@ const FlipBook = ({
             castShadow
             Textures={Textures ? Textures.slice(32, 40) : []}
           />
-          <Pages_40
+          <Pages_040
             DiffuseMap={Paper_Color}
             BumpMap={Paper_Bump}
             ImagesReady={ImagesReady}

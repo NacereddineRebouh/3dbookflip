@@ -9,27 +9,22 @@ import React, {
   useRef,
   useState,
 } from "react";
-import { Perf } from "r3f-perf";
 
-import {
-  ContactShadows,
-  OrbitControls,
-  useProgress,
-  useTexture,
-} from "@react-three/drei";
+import { OrbitControls, useProgress, useTexture } from "@react-three/drei";
 
 import Environement from "./Environment";
 import axios, { AxiosProgressEvent, AxiosRequestConfig } from "axios";
 import FormData from "form-data";
 import { SRGBColorSpace, Texture, TextureLoader } from "three";
 
-import { Book } from "./Book";
-import { Pages_000 } from "./Pages_000";
-import { Pages_008 } from "./Pages_008";
-import { Pages_016 } from "./Pages_016";
-import { Pages_024 } from "./Pages_024";
-import { Pages_032 } from "./Pages_032";
-import { Pages_040 } from "./Pages_040";
+import { Pages_008 as Pages_8 } from "@/components/Scene/New/Pages_008";
+import { Pages_000 as Pages_0 } from "@/components/Scene/New/Pages_000";
+import { Pages_16 } from "@/components/Scene/New/Pages_016";
+import { Pages_24 } from "./New/Pages_024";
+import { Pages_32 } from "./New/Pages_032";
+import { Pages_40 } from "./New/Pages_040";
+import { Animation_Controllers } from "./New/Animation_Controllers";
+import { Book } from "./New/Book2";
 type Props = {
   Video: File | null;
   setUploaded: Dispatch<SetStateAction<boolean | null>>;
@@ -49,26 +44,9 @@ export default function Scene({
     if (Video) {
       const f = async () => {
         try {
-          //     const reader = new FileReader();
-
-          // reader.onload = function(event) {
-          //   if(event.ta)
-          //     const fileData = event.target.result;
-
-          // };
           const data = new FormData();
           data.append("file", Video);
           data.append("_method", "put");
-          // const res = await fetch(`/api/video`, {
-          //   method: "POST",
-          //   headers: {
-          //     "Content-Type": "multipart/form-data",
-          //   },
-          //   body: formData,
-          // });
-          // console.log("res:", res);
-          // setUploadProgress(0);
-
           console.log("Starting Video upload", data.getHeaders);
           const config: AxiosRequestConfig = {
             headers: data.getHeaders
@@ -84,9 +62,6 @@ export default function Scene({
               }
             },
           };
-
-          console.log("....", data);
-          // console.log(data);
           const res = await axios.post("/api/video", data, config);
 
           console.log("status :", res.status);
@@ -94,6 +69,7 @@ export default function Scene({
 
           if (res.status == 200) {
             const Pages = GetTextures();
+            console.log(Pages);
             setTextures(Pages);
             setImagesReady(true);
 
@@ -101,9 +77,6 @@ export default function Scene({
               setStartAnimation(true);
             }, 1000);
             setUploaded(true);
-            // console.log(
-            // "// -------------- Starting the animation ....-------------- //"
-            // );
           }
         } catch (error) {
           console.log("Upload Failed", error);
@@ -210,181 +183,80 @@ const FlipBook = ({
   // const dispatch = useAppDispatch();
   // // ------- //
 
+  console.log(loaded);
   useEffect(() => {
-    const value = ((loaded / 24) * 100).toFixed(0) as unknown as number;
+    const value = ((loaded / 21) * 100).toFixed(0) as unknown as number;
+    console.log(total);
     setPercentage(value);
-  }, [progress, loaded]);
+  }, [progress, loaded, total]);
   return (
     <group scale={[5, 5, 5]}>
-      <Book
-        castShadow
-        DiffuseMap={BookCover_Base_Color}
-        RoughnessMap={BookCover_Roughness_map}
-        NormalMap={BookCover_Normal_map}
-        ImagesReady={ImagesReady}
-        StartAnimation={StartAnimation}
-      />
-      <Suspense fallback={null}>
-        <Pages_000
-          DiffuseMap={Paper_Color}
-          BumpMap={Paper_Bump}
+      <Animation_Controllers StartAnimation={StartAnimation}>
+        <Book
+          castShadow
+          DiffuseMap={BookCover_Base_Color}
+          RoughnessMap={BookCover_Roughness_map}
+          NormalMap={BookCover_Normal_map}
           ImagesReady={ImagesReady}
           StartAnimation={StartAnimation}
-          setUploaded={setUploaded}
-          setImagesReady={setImagesReady}
-          setStartAnimation={setStartAnimation}
-          castShadow
-          Textures={Textures ? Textures.slice(0, 8) : []}
         />
-        <Pages_008
-          DiffuseMap={Paper_Color}
-          BumpMap={Paper_Bump}
-          castShadow
-          ImagesReady={ImagesReady}
-          StartAnimation={StartAnimation}
-          Textures={Textures ? Textures.slice(8, 16) : []}
-        />
-        <Pages_016
-          DiffuseMap={Paper_Color}
-          BumpMap={Paper_Bump}
-          castShadow
-          ImagesReady={ImagesReady}
-          StartAnimation={StartAnimation}
-          Textures={Textures ? Textures.slice(16, 24) : []}
-        />
-        <Pages_024
-          DiffuseMap={Paper_Color}
-          BumpMap={Paper_Bump}
-          castShadow
-          ImagesReady={ImagesReady}
-          StartAnimation={StartAnimation}
-          Textures={Textures ? Textures.slice(24, 32) : []}
-        />
-        <Pages_032
-          DiffuseMap={Paper_Color}
-          BumpMap={Paper_Bump}
-          castShadow
-          ImagesReady={ImagesReady}
-          StartAnimation={StartAnimation}
-          Textures={Textures ? Textures.slice(32, 40) : []}
-        />
-        <Pages_040
-          DiffuseMap={Paper_Color}
-          BumpMap={Paper_Bump}
-          castShadow
-          ImagesReady={ImagesReady}
-          StartAnimation={StartAnimation}
-          Textures={Textures ? Textures.slice(40, 48) : []}
-        />
-      </Suspense>
+        <Suspense fallback={null}>
+          <Pages_0
+            DiffuseMap={Paper_Color}
+            BumpMap={Paper_Bump}
+            ImagesReady={ImagesReady}
+            StartAnimation={StartAnimation}
+            setUploaded={setUploaded}
+            setImagesReady={setImagesReady}
+            setStartAnimation={setStartAnimation}
+            castShadow
+            Textures={Textures ? Textures.slice(0, 8) : []}
+          />
+          <Pages_8
+            DiffuseMap={Paper_Color}
+            BumpMap={Paper_Bump}
+            ImagesReady={ImagesReady}
+            StartAnimation={StartAnimation}
+            castShadow
+            Textures={Textures ? Textures.slice(8, 16) : []}
+          />
+          <Pages_16
+            DiffuseMap={Paper_Color}
+            BumpMap={Paper_Bump}
+            ImagesReady={ImagesReady}
+            StartAnimation={StartAnimation}
+            castShadow
+            Textures={Textures ? Textures.slice(16, 24) : []}
+          />
+          <Pages_24
+            DiffuseMap={Paper_Color}
+            BumpMap={Paper_Bump}
+            ImagesReady={ImagesReady}
+            StartAnimation={StartAnimation}
+            castShadow
+            Textures={Textures ? Textures.slice(24, 32) : []}
+          />
+          <Pages_32
+            DiffuseMap={Paper_Color}
+            BumpMap={Paper_Bump}
+            ImagesReady={ImagesReady}
+            StartAnimation={StartAnimation}
+            castShadow
+            Textures={Textures ? Textures.slice(32, 40) : []}
+          />
+          <Pages_40
+            DiffuseMap={Paper_Color}
+            BumpMap={Paper_Bump}
+            ImagesReady={ImagesReady}
+            StartAnimation={StartAnimation}
+            castShadow
+            Textures={Textures ? Textures.slice(40, 48) : []}
+          />
+        </Suspense>
+      </Animation_Controllers>
     </group>
   );
 };
-// const FlipBook2 = ({
-//   bool = false,
-//   ImagesReady = false,
-//   StartAnimation = false,
-//   setUploaded,
-//   setImagesReady,
-//   setStartAnimation,
-//   setPercentage,
-// }: {
-//   bool: boolean;
-//   ImagesReady: boolean;
-//   StartAnimation: boolean;
-//   setUploaded: Dispatch<SetStateAction<boolean | null>>;
-//   setImagesReady: Dispatch<SetStateAction<boolean>>;
-//   setStartAnimation: Dispatch<SetStateAction<boolean>>;
-//   setPercentage: Dispatch<SetStateAction<number>>;
-// }) => {
-//   const [
-//     Paper_Color,
-//     Paper_Bump,
-//     BookCover_Base_Color,
-//     BookCover_Normal_map,
-//     BookCover_Roughness_map,
-//   ] = useTexture([
-//     "/Textures/Page_empty.jpg",
-//     "/Textures/Paper_Bump.jpg",
-//     "/Textures/BookCover_Base_Color.webp",
-//     "/Textures/BookCover_Normal_map.webp",
-//     "/Textures/BookCover_Roughness_map.webp",
-//   ]);
-//   const { progress, loaded, total } = useProgress();
-//   // const dispatch = useAppDispatch();
-//   // // ------- //
-//   useEffect(() => {
-//     const value = ((loaded / 21) * 100).toFixed(0) as unknown as number;
-//     console.log(total);
-//     setPercentage(value);
-//   }, [progress, loaded]);
-//   return (
-//     <group scale={[5, 5, 5]}>
-//       <Book2
-//         castShadow
-//         DiffuseMap={BookCover_Base_Color}
-//         RoughnessMap={BookCover_Roughness_map}
-//         NormalMap={BookCover_Normal_map}
-//         ImagesReady={true}
-//         StartAnimation={true}
-//       />
-//       <Suspense fallback={null}>
-//         {/* <Pages_Controller StartAnimation={true}> */}
-//         <Pages_0
-//           DiffuseMap={Paper_Color}
-//           BumpMap={Paper_Bump}
-//           ImagesReady={true}
-//           StartAnimation={true}
-//           setUploaded={setUploaded}
-//           setImagesReady={setImagesReady}
-//           setStartAnimation={setStartAnimation}
-//           castShadow
-//         />
-//         {/* <Pages_8
-//             DiffuseMap={Paper_Color}
-//             BumpMap={Paper_Bump}
-//             castShadow
-//             ImagesReady={true}
-//             StartAnimation={true}
-//           />
-//           <Pages_16
-//             DiffuseMap={Paper_Color}
-//             BumpMap={Paper_Bump}
-//             castShadow
-//             ImagesReady={true}
-//             StartAnimation={true}
-//           />
-//           <Pages_24
-//             DiffuseMap={Paper_Color}
-//             BumpMap={Paper_Bump}
-//             castShadow
-//             ImagesReady={true}
-//             StartAnimation={true}
-//           />
-//           <Pages_32
-//             DiffuseMap={Paper_Color}
-//             BumpMap={Paper_Bump}
-//             castShadow
-//             ImagesReady={true}
-//             StartAnimation={true}
-//           />
-//           <Pages_40
-//             DiffuseMap={Paper_Color}
-//             BumpMap={Paper_Bump}
-//             castShadow
-//             ImagesReady={true}
-//             StartAnimation={true}
-//           /> */}
-//         {/* </Pages_Controller> */}
-//       </Suspense>
-//     </group>
-//   );
-// };
-
-function calculateAspectRatioString(width: number, height: number) {
-  const ratio: number = height / width;
-  return { a: 1, b: ratio };
-}
 
 export const GetTextures = () => {
   const Pages: THREE.Texture[] = [];

@@ -91,17 +91,12 @@ async function CallPost(req: NextApiRequest, res: NextApiResponse) {
       console.log(duration);
       console.log("new dur", duration);
       const timestamps = calculateTimestamps(duration, 48);
-      console.log("timestamps", timestamps);
-      const ff = readdirSync("/var/task/");
-      console.log("dir in ff,", ff);
       try {
         console.log("1:", fileName);
         ffmpeg(filePath)
           .on("end", async function () {
             console.log("Screenshots taken");
             const fileContent = readFileSync("/tmp/Pages_001.jpeg");
-            console.log("---Page 001:", fileContent.byteLength);
-
             const tmpDir = "/tmp"; // Update with your actual temporary directory path
             const files = readdirSync(tmpDir);
             console.log("savefd images in tmp,", files);

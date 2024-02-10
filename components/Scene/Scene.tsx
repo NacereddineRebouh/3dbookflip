@@ -140,7 +140,7 @@ export default function Scene({
         receiveShadow
         castShadow={false}
       >
-        <planeGeometry args={[6, 4]}></planeGeometry>
+        <planeGeometry args={[8, 8]}></planeGeometry>
         <meshStandardMaterial roughness={1} color={"#fdbcbb"} />
       </mesh>
       <FlipBook

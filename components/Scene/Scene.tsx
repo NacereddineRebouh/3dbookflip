@@ -35,6 +35,9 @@ import { Book } from "./New/Book2";
 import { Pages_016 } from "./New/Pages_016";
 import { Pages_000 } from "./New/Pages_000";
 import { Pages_008 } from "./New/Pages_008";
+import { Pages_000_2 } from "./New/Pages_000_2";
+import { One_Page } from "@/One_Page";
+import { AllPages } from "@/AllPages";
 type Props = {
   Video: File | null;
   setUploaded: Dispatch<SetStateAction<boolean | null>>;
@@ -204,14 +207,17 @@ const FlipBook = ({
     <group scale={[5, 5, 5]}>
       <Animation_Controllers StartAnimation={StartAnimation}>
         <Suspense fallback={null}>
-          <Book
+          {/* <Book
             castShadow
             DiffuseMap={BookCover_Base_Color}
             RoughnessMap={BookCover_Roughness_map}
             NormalMap={BookCover_Normal_map}
             ImagesReady={ImagesReady}
             StartAnimation={StartAnimation}
-          />
+          /> */}
+          {/* <One_Page /> */}
+
+          <AllPages />
           {/* <Pages_000
             DiffuseMap={Paper_Color}
             BumpMap={Paper_Bump}
@@ -222,8 +228,8 @@ const FlipBook = ({
             setStartAnimation={setStartAnimation}
             castShadow
             Textures={Textures ? Textures.slice(0, 8) : []}
-          />
-          <Pages_008
+          /> */}
+          {/* <Pages_008
             DiffuseMap={Paper_Color}
             BumpMap={Paper_Bump}
             ImagesReady={ImagesReady}

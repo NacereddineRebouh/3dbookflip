@@ -215,9 +215,9 @@ const FlipBook = ({
             ImagesReady={ImagesReady}
             StartAnimation={StartAnimation}
           /> */}
-          {/* <One_Page /> */}
+          <One_Page />
 
-          <AllPages />
+          {/* <AllPages /> */}
           {/* <Pages_000
             DiffuseMap={Paper_Color}
             BumpMap={Paper_Bump}

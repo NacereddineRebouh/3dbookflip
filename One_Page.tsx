@@ -8,7 +8,7 @@ import React, { useEffect, useRef } from "react";
 import { useGLTF, useAnimations } from "@react-three/drei";
 import { GLTF } from "three-stdlib";
 import { useFrame, useThree } from "@react-three/fiber";
-
+import * as SkeletonUtils from "three/addons/utils/SkeletonUtils.js";
 type GLTFResult = GLTF & {
   nodes: {
     Plane: THREE.Mesh;
@@ -40,12 +40,13 @@ export function One_Page(props: JSX.IntrinsicElements["group"]) {
   const { scene } = useThree();
   console.log(animations);
   useEffect(() => {
-    new Array(8).fill(0).map((v, index) => {
-      const page = nodes.Plane.clone();
-      page.morphTargetDictionary = nodes.Plane.morphTargetDictionary;
-      page.morphTargetInfluences = nodes.Plane.morphTargetInfluences;
+    new Array(48).fill(0).map((v, index) => {
+      const page = SkeletonUtils.clone(nodes.Plane);
+      // page.morphTargetDictionary = nodes.Plane.morphTargetDictionary;
+      // page.morphTargetInfluences = nodes.Plane.morphTargetInfluences;
       page.name = "Plane";
-      page.position.set(0, 0.005 * index, 0);
+
+      page.position.set(0, 0.0005 * index, 0);
       const mixer = new THREE.AnimationMixer(page);
       const a = animations[0].clone();
       a.tracks.splice(1, 1);
@@ -72,6 +73,26 @@ export function One_Page(props: JSX.IntrinsicElements["group"]) {
         <group ref={group2} name="Pages_000">
           {/* <mesh name="Plane" geometry={nodes.Plane.geometry} material={materials['Opaline Paper']} />
           <mesh name="Plane_1" geometry={nodes.Plane_1.geometry} material={materials.White} /> */}
+          {/* <mesh
+            key={0}
+            castShadow
+            name={"Plane"}
+            position={[0, 0.005 * 1, 0]}
+            geometry={nodes.Plane.geometry}
+            material={materials["Opaline Paper"]}
+            morphTargetDictionary={nodes.Plane.morphTargetDictionary}
+            morphTargetInfluences={nodes.Plane.morphTargetInfluences}
+          />
+          <mesh
+            key={0}
+            castShadow
+            name={"Plane"}
+            position={[0, 0.005 * 0, 0]}
+            geometry={nodes.Plane.geometry}
+            material={materials["Opaline Paper"]}
+            morphTargetDictionary={nodes.Plane.morphTargetDictionary}
+            morphTargetInfluences={nodes.Plane.morphTargetInfluences}
+          /> */}
           {/* {[...Array(4)].map((_, index) => (
             <mesh
               key={index}

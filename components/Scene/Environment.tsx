@@ -7,6 +7,7 @@ import {
 } from "@react-three/drei";
 import { PointLight, SpotLight, Vector3 } from "three";
 import { useControls } from "leva";
+import { EffectComposer, TiltShift2 } from "@react-three/postprocessing";
 
 type Props = {};
 
@@ -19,7 +20,7 @@ export default function Environement({}: Props) {
   //   radius: { value: 3.2, min: 0, max: 10 },
   //   blurSamples: { value: 25, min: 1, max: 30, step: 1 },
   // });
-  const radius = 3.2;
+  const radius = 2;
   const blurSamples = 25;
   const spotLight = useRef<SpotLight>(null);
   const pointLight = useRef<PointLight>(null);
@@ -37,13 +38,13 @@ export default function Environement({}: Props) {
   }, []);
   return (
     <>
-      {/* <AccumulativeShadows >
-        <RandomizedLight position={[0, -0.005, 0]} />
-      </AccumulativeShadows> */}
+      {/* <EffectComposer disableNormalPass multisampling={4}>
+        <TiltShift2 blur={0.2}  />
+      </EffectComposer> */}
       {/* <spotLight
-        // shadow-radius={radius}
-        // shadow-mapSize-width={1024}
-        // shadow-mapSize-height={1024}
+        shadow-radius={radius}
+        shadow-mapSize-width={1024 }
+        shadow-mapSize-height={1024 }
         rotation={[0, 0, 0]}
         castShadow
         intensity={6}
@@ -51,35 +52,35 @@ export default function Environement({}: Props) {
       ></spotLight> */}
       <spotLight
         ref={spotLight}
-        // shadow-radius={radius}
-        // shadow-mapSize-width={1024}
-        // shadow-mapSize-height={1024}
+        shadow-radius={radius}
+        shadow-mapSize-width={1024 * 2}
+        shadow-mapSize-height={1024 * 2}
         rotation={[0, 0, 0]}
         castShadow
         intensity={12}
         position={cords}
       ></spotLight>
       {/* <pointLight
-        // shadow-radius={radius}
-        // shadow-mapSize-width={1024}
-        // shadow-mapSize-height={1024}
+        shadow-radius={radius}
+        shadow-mapSize-width={1024 }
+        shadow-mapSize-height={1024 }
         castShadow
         position={cords}
         intensity={6}
       />
       <pointLight
-        // shadow-radius={radius}
-        // shadow-mapSize-width={1024}
-        // shadow-mapSize-height={1024}
+        shadow-radius={radius}
+        shadow-mapSize-width={1024 }
+        shadow-mapSize-height={1024 }
         castShadow
         position={cords}
         intensity={12}
       /> */}
       <pointLight
         ref={pointLight}
-        // shadow-radius={radius}
-        // shadow-mapSize-width={1024}
-        // shadow-mapSize-height={1024}
+        shadow-radius={radius}
+        shadow-mapSize-width={1024 * 2}
+        shadow-mapSize-height={1024 * 2}
         castShadow
         position={cords}
         intensity={24}

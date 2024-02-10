@@ -17,11 +17,11 @@ export default function Home() {
 
   return (
     <main className="bg-orange-300 flex h-full min-h-screen min-w-full p-0">
-      <AnimatePresence mode="wait">
+      {/* <AnimatePresence mode="wait">
         {!Loaded && (
           <LoadingScreen percentage={percentage} setLoaded={setLoaded} />
         )}
-      </AnimatePresence>
+      </AnimatePresence> */}
       <VideUploadButton
         uploadProgress={uploadProgress}
         Uploaded={Uploaded}

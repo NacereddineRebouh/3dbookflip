@@ -15,7 +15,12 @@ import { OrbitControls, useProgress, useTexture } from "@react-three/drei";
 import Environement from "./Environment";
 import axios, { AxiosProgressEvent, AxiosRequestConfig } from "axios";
 import FormData from "form-data";
-import { SRGBColorSpace, Texture, TextureLoader } from "three";
+import {
+  PCFSoftShadowMap,
+  SRGBColorSpace,
+  Texture,
+  TextureLoader,
+} from "three";
 
 import { Pages_024 } from "./New/Pages_024";
 import { Pages_032 } from "./New/Pages_032";
@@ -97,9 +102,11 @@ export default function Scene({
     <Canvas
       style={{ opacity: 1 }}
       shadows
-      gl={{
-        antialias: true,
-      }}
+      gl={
+        {
+          // antialias: true,
+        }
+      }
       className="!absolute !top-1/2 -translate-y-1/2 z-0 !left-0 w-full h-full"
       camera={{
         position: [0, 6, 0],
@@ -134,15 +141,6 @@ export default function Scene({
         StartAnimation={StartAnimation}
         setStartAnimation={setStartAnimation}
       />
-      {/* <FlipBook2
-        bool={bool}
-        setPercentage={setPercentage}
-        setUploaded={setUploaded}
-        setImagesReady={setImagesReady}
-        ImagesReady={ImagesReady}
-        StartAnimation={StartAnimation}
-        setStartAnimation={setStartAnimation}
-      /> */}
     </Canvas>
   );
 }

@@ -43,7 +43,7 @@ export default function VideUploadButton({
       animate={{ opacity: 1, transition: { delay: 5 } }}
       initial={{ opacity: 0 }}
       exit={{ opacity: 0 }}
-      className="z-40 flex min-h-screen w-full items-end p-32 justify-center"
+      className="z-40 flex items-end p-32 justify-center"
     >
       <div className="rounded-md border border-gray-100 bg-white p-4 shadow-md">
         <label

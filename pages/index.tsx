@@ -16,7 +16,7 @@ export default function Home() {
   const [uploadProgress, setUploadProgress] = useState<number>(0);
 
   return (
-    <main className="bg-orange-300 flex h-full min-h-screen min-w-full p-0">
+    <main className="bg-[#e3c7c5] flex h-full min-h-screen min-w-full p-0">
       {/* <AnimatePresence mode="wait">
         {!Loaded && (
           <LoadingScreen percentage={percentage} setLoaded={setLoaded} />

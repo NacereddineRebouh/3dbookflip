@@ -13,7 +13,7 @@ export default function LoadingScreen({ setLoaded, percentage }: Props) {
       animate={{ opacity: 1 }}
       initial={{ opacity: 0 }}
       exit={{ opacity: 0 }}
-      className="fixed top-0 flex !z-50 h-full w-full select-none flex-col items-center justify-center gap-y-1 bg-[#c4908e] text-sm font-thin transition-all duration-300"
+      className="fixed top-0 flex !z-50 h-full w-full select-none flex-col items-center justify-center gap-y-1 bg-[#bba3a1] text-sm font-thin transition-all duration-300"
     >
       <AnimatePresence mode="wait">
         {percentage < 100 && (

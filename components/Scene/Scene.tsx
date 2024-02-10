@@ -210,7 +210,7 @@ const FlipBook = ({
             NormalMap={BookCover_Normal_map}
             ImagesReady={ImagesReady}
             StartAnimation={StartAnimation}
-          />
+          />*/}
           <Pages_000
             DiffuseMap={Paper_Color}
             BumpMap={Paper_Bump}
@@ -253,7 +253,7 @@ const FlipBook = ({
             StartAnimation={StartAnimation}
             castShadow
             Textures={Textures ? Textures.slice(32, 40) : []}
-          /> */}
+          />
           <Pages_040
             DiffuseMap={Paper_Color}
             BumpMap={Paper_Bump}

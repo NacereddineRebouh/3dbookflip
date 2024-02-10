@@ -10,7 +10,12 @@ import React, {
   useState,
 } from "react";
 
-import { OrbitControls, useProgress, useTexture } from "@react-three/drei";
+import {
+  OrbitControls,
+  PerformanceMonitor,
+  useProgress,
+  useTexture,
+} from "@react-three/drei";
 
 import Environement from "./Environment";
 import axios, { AxiosProgressEvent, AxiosRequestConfig } from "axios";
@@ -98,8 +103,11 @@ export default function Scene({
   DifTexture.image = "/Textures/Page_empty.jpg";
   const BumpTexture = new Texture();
   BumpTexture.image = "/Textures/Paper_Bump.jpg";
+
+  const [dpr, setDpr] = useState(1.5);
   return (
     <Canvas
+      dpr={dpr}
       style={{ opacity: 1 }}
       shadows
       gl={
@@ -116,6 +124,10 @@ export default function Scene({
       }}
       onCreated={(state) => (state.gl.toneMappingExposure = 1)}
     >
+      <PerformanceMonitor
+        factor={1}
+        onChange={({ factor }) => setDpr(Math.floor(0.5 + 1.5 * factor))}
+      />
       {/* <Perf /> */}
       <Environement />
       <ambientLight intensity={1} color={"white"} />

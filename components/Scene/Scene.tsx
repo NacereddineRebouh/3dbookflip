@@ -140,24 +140,9 @@ export default function Scene({
         receiveShadow
         castShadow={false}
       >
-        <planeGeometry args={[8, 8]}></planeGeometry>
+        <planeGeometry args={[16, 16]}></planeGeometry>
         <meshStandardMaterial roughness={1} color={"#fdbcbb"} />
       </mesh>
-
-      {new Array(62).fill(0).map((v, index) => {
-        return (
-          <mesh
-            key={index}
-            rotation={[0, 0, 0]}
-            position={[(0.3 / 2) * index, 0, 0]}
-            receiveShadow
-            castShadow={false}
-          >
-            <boxGeometry args={[0.05, 0.05]}></boxGeometry>
-            <meshNormalMaterial />
-          </mesh>
-        );
-      })}
 
       <FlipBook
         Textures={Textures}
@@ -219,14 +204,14 @@ const FlipBook = ({
     <group scale={[5, 5, 5]}>
       <Animation_Controllers StartAnimation={StartAnimation}>
         <Suspense fallback={null}>
-          {/* <Book
+          <Book
             castShadow
             DiffuseMap={BookCover_Base_Color}
             RoughnessMap={BookCover_Roughness_map}
             NormalMap={BookCover_Normal_map}
             ImagesReady={ImagesReady}
             StartAnimation={StartAnimation}
-          />*/}
+          />
           {/* <Pages_000
             DiffuseMap={Paper_Color}
             BumpMap={Paper_Bump}

@@ -104,7 +104,7 @@ export default function Scene({
   const BumpTexture = new Texture();
   BumpTexture.image = "/Textures/Paper_Bump.jpg";
 
-  const [dpr, setDpr] = useState(1.5);
+  const [dpr, setDpr] = useState(1);
   return (
     <Canvas
       dpr={dpr}
@@ -126,7 +126,7 @@ export default function Scene({
     >
       <PerformanceMonitor
         factor={1}
-        onChange={({ factor }) => setDpr(Math.floor(0.5 + 1.5 * factor))}
+        onChange={({ factor }) => setDpr(Math.floor(1.5 * factor))}
       />
       {/* <Perf /> */}
       <Environement />
@@ -190,6 +190,9 @@ const FlipBook = ({
     "/Textures/BookCover_Roughness_map.webp",
   ]);
   const { progress, loaded, total } = useProgress();
+  BookCover_Base_Color.colorSpace = SRGBColorSpace;
+  BookCover_Normal_map.colorSpace = SRGBColorSpace;
+  BookCover_Roughness_map.colorSpace = SRGBColorSpace;
   // const dispatch = useAppDispatch();
   // // ------- //
   useEffect(() => {
@@ -199,15 +202,15 @@ const FlipBook = ({
   return (
     <group scale={[5, 5, 5]}>
       <Animation_Controllers StartAnimation={StartAnimation}>
-        <Book
-          castShadow
-          DiffuseMap={BookCover_Base_Color}
-          RoughnessMap={BookCover_Roughness_map}
-          NormalMap={BookCover_Normal_map}
-          ImagesReady={ImagesReady}
-          StartAnimation={StartAnimation}
-        />
         <Suspense fallback={null}>
+          <Book
+            castShadow
+            DiffuseMap={BookCover_Base_Color}
+            RoughnessMap={BookCover_Roughness_map}
+            NormalMap={BookCover_Normal_map}
+            ImagesReady={ImagesReady}
+            StartAnimation={StartAnimation}
+          />
           <Pages_000
             DiffuseMap={Paper_Color}
             BumpMap={Paper_Bump}

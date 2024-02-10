@@ -37,10 +37,13 @@ export default function Environement({}: Props) {
   }, []);
   return (
     <>
+      {/* <AccumulativeShadows >
+        <RandomizedLight position={[0, -0.005, 0]} />
+      </AccumulativeShadows> */}
       {/* <spotLight
-        shadow-radius={radius}
-        shadow-mapSize-width={1024 * 2}
-        shadow-mapSize-height={1024 * 2}
+        // shadow-radius={radius}
+        // shadow-mapSize-width={1024}
+        // shadow-mapSize-height={1024}
         rotation={[0, 0, 0]}
         castShadow
         intensity={6}
@@ -48,35 +51,35 @@ export default function Environement({}: Props) {
       ></spotLight> */}
       <spotLight
         ref={spotLight}
-        shadow-radius={radius}
-        shadow-mapSize-width={1024 * 4}
-        shadow-mapSize-height={1024 * 4}
+        // shadow-radius={radius}
+        // shadow-mapSize-width={1024}
+        // shadow-mapSize-height={1024}
         rotation={[0, 0, 0]}
         castShadow
         intensity={12}
         position={cords}
       ></spotLight>
       {/* <pointLight
-        shadow-radius={radius}
-        shadow-mapSize-width={1024 * 2}
-        shadow-mapSize-height={1024 * 2}
+        // shadow-radius={radius}
+        // shadow-mapSize-width={1024}
+        // shadow-mapSize-height={1024}
         castShadow
         position={cords}
         intensity={6}
       />
       <pointLight
-        shadow-radius={radius}
-        shadow-mapSize-width={1024 * 2}
-        shadow-mapSize-height={1024 * 2}
+        // shadow-radius={radius}
+        // shadow-mapSize-width={1024}
+        // shadow-mapSize-height={1024}
         castShadow
         position={cords}
         intensity={12}
       /> */}
       <pointLight
         ref={pointLight}
-        shadow-radius={radius}
-        shadow-mapSize-width={1024 * 4}
-        shadow-mapSize-height={1024 * 4}
+        // shadow-radius={radius}
+        // shadow-mapSize-width={1024}
+        // shadow-mapSize-height={1024}
         castShadow
         position={cords}
         intensity={24}

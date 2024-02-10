@@ -203,7 +203,7 @@ const FlipBook = ({
     <group scale={[5, 5, 5]}>
       <Animation_Controllers StartAnimation={StartAnimation}>
         <Suspense fallback={null}>
-          <Book
+          {/* <Book
             castShadow
             DiffuseMap={BookCover_Base_Color}
             RoughnessMap={BookCover_Roughness_map}
@@ -253,7 +253,7 @@ const FlipBook = ({
             StartAnimation={StartAnimation}
             castShadow
             Textures={Textures ? Textures.slice(32, 40) : []}
-          />
+          /> */}
           <Pages_040
             DiffuseMap={Paper_Color}
             BumpMap={Paper_Bump}

@@ -53,8 +53,8 @@ export default function Environement({}: Props) {
       <spotLight
         ref={spotLight}
         shadow-radius={radius}
-        shadow-mapSize-width={1024 * 2}
-        shadow-mapSize-height={1024 * 2}
+        shadow-mapSize-width={1024}
+        shadow-mapSize-height={1024}
         rotation={[0, 0, 0]}
         castShadow
         intensity={12}
@@ -79,8 +79,8 @@ export default function Environement({}: Props) {
       <pointLight
         ref={pointLight}
         shadow-radius={radius}
-        shadow-mapSize-width={1024 * 2}
-        shadow-mapSize-height={1024 * 2}
+        shadow-mapSize-width={1024}
+        shadow-mapSize-height={1024}
         castShadow
         position={cords}
         intensity={24}

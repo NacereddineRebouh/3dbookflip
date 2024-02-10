@@ -22,11 +22,11 @@ export default function Home() {
           <LoadingScreen percentage={percentage} setLoaded={setLoaded} />
         )}
       </AnimatePresence> */}
-      <VideUploadButton
+      {/* <VideUploadButton
         uploadProgress={uploadProgress}
         Uploaded={Uploaded}
         setVideo={setVideo}
-      />
+      /> */}
       <Scene
         setUploadProgress={setUploadProgress}
         setPercentage={setPercentage}

@@ -24,8 +24,8 @@ type propsBook = JSX.IntrinsicElements["group"] & {
   DiffuseMap: THREE.Texture;
   RoughnessMap: THREE.Texture;
   NormalMap: THREE.Texture;
-  StartAnimation: Boolean;
-  ImagesReady: Boolean;
+  StartAnimation: boolean;
+  ImagesReady: boolean;
 };
 
 export function Book(props: propsBook) {

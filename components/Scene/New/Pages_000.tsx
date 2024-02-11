@@ -43,8 +43,8 @@ type GLTFResult = GLTF & {
 type propsBook = JSX.IntrinsicElements["group"] & {
   DiffuseMap: THREE.Texture;
   BumpMap: THREE.Texture;
-  StartAnimation: Boolean;
-  ImagesReady: Boolean;
+  StartAnimation: boolean;
+  ImagesReady: boolean;
   Textures: THREE.Texture[];
   setUploaded: Dispatch<SetStateAction<boolean | null>>;
   setImagesReady: Dispatch<SetStateAction<boolean>>;

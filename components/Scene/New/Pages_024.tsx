@@ -53,8 +53,8 @@ type ContextType = Record<
 type propsBook = JSX.IntrinsicElements["group"] & {
   DiffuseMap: THREE.Texture;
   BumpMap: THREE.Texture;
-  StartAnimation: Boolean;
-  ImagesReady: Boolean;
+  StartAnimation: boolean;
+  ImagesReady: boolean;
   Textures: THREE.Texture[];
 };
 

@@ -20,7 +20,7 @@ interface GLTFAction extends THREE.AnimationClip {
 }
 
 type propsBook = JSX.IntrinsicElements["group"] & {
-  StartAnimation: Boolean;
+  StartAnimation: boolean;
 };
 
 export function Animation_Controllers(props: propsBook) {

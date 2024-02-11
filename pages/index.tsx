@@ -17,16 +17,16 @@ export default function Home() {
 
   return (
     <main className="bg-[#e3c7c5] flex h-full min-h-screen min-w-full p-0">
-      {/* <AnimatePresence mode="wait">
+      <AnimatePresence mode="wait">
         {!Loaded && (
           <LoadingScreen percentage={percentage} setLoaded={setLoaded} />
         )}
-      </AnimatePresence> */}
-      {/* <VideUploadButton
+      </AnimatePresence>
+      <VideUploadButton
         uploadProgress={uploadProgress}
         Uploaded={Uploaded}
         setVideo={setVideo}
-      /> */}
+      />
       <Scene
         setUploadProgress={setUploadProgress}
         setPercentage={setPercentage}

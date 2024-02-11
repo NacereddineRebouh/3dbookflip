@@ -35,9 +35,6 @@ import { Book } from "./New/Book2";
 import { Pages_016 } from "./New/Pages_016";
 import { Pages_000 } from "./New/Pages_000";
 import { Pages_008 } from "./New/Pages_008";
-import { Pages_000_2 } from "./New/Pages_000_2";
-import { One_Page } from "@/One_Page";
-import { AllPages } from "@/AllPages";
 type Props = {
   Video: File | null;
   setUploaded: Dispatch<SetStateAction<boolean | null>>;
@@ -109,55 +106,57 @@ export default function Scene({
 
   const [dpr, setDpr] = useState(1);
   return (
-    <Canvas
-      dpr={dpr}
-      style={{ opacity: 1 }}
-      shadows
-      gl={
-        {
-          // antialias: true,
+    <>
+      <Canvas
+        dpr={dpr}
+        style={{ opacity: 1 }}
+        shadows
+        gl={
+          {
+            // antialias: true,
+          }
         }
-      }
-      className="!absolute !top-1/2 -translate-y-1/2 z-0 !left-0 w-full h-full"
-      camera={{
-        position: [0, 6, 0],
-        fov: 14,
-        rotation: [0, Math.PI / 2, 0],
-        near: 0.01,
-      }}
-      onCreated={(state) => (state.gl.toneMappingExposure = 1)}
-    >
-      <PerformanceMonitor
-        factor={1}
-        onChange={({ factor }) => setDpr(Math.floor(1.5 * factor))}
-      />
-      {/* <Perf /> */}
-      <Environement />
-      <ambientLight intensity={1} color={"white"} />
-
-      <OrbitControls enableZoom />
-      {/* <Model /> */}
-      <mesh
-        rotation={[-Math.PI / 2, 0, 0]}
-        position={[0, -0.005, 0]}
-        receiveShadow
-        castShadow={false}
+        className="!absolute !top-1/2 -translate-y-1/2 z-0 !left-0 w-full h-full"
+        camera={{
+          position: [0, 6, 0],
+          fov: 14,
+          rotation: [0, Math.PI / 2, 0],
+          near: 0.01,
+        }}
+        onCreated={(state) => (state.gl.toneMappingExposure = 1)}
       >
-        <planeGeometry args={[16, 16]}></planeGeometry>
-        <meshStandardMaterial roughness={1} color={"#fdbcbb"} />
-      </mesh>
+        <PerformanceMonitor
+          factor={1}
+          onChange={({ factor }) => setDpr(Math.floor(1.5 * factor))}
+        />
+        {/* <Perf /> */}
+        <Environement />
+        <ambientLight intensity={1} color={"white"} />
 
-      <FlipBook
-        Textures={Textures}
-        bool={bool}
-        setPercentage={setPercentage}
-        setUploaded={setUploaded}
-        setImagesReady={setImagesReady}
-        ImagesReady={ImagesReady}
-        StartAnimation={StartAnimation}
-        setStartAnimation={setStartAnimation}
-      />
-    </Canvas>
+        <OrbitControls enableZoom />
+        {/* <Model /> */}
+        <mesh
+          rotation={[-Math.PI / 2, 0, 0]}
+          position={[0, -0.005, 0]}
+          receiveShadow
+          castShadow={false}
+        >
+          <planeGeometry args={[16, 16]}></planeGeometry>
+          <meshStandardMaterial roughness={1} color={"#fdbcbb"} />
+        </mesh>
+
+        <FlipBook
+          Textures={Textures}
+          bool={bool}
+          setPercentage={setPercentage}
+          setUploaded={setUploaded}
+          setImagesReady={setImagesReady}
+          ImagesReady={ImagesReady}
+          StartAnimation={StartAnimation}
+          setStartAnimation={setStartAnimation}
+        />
+      </Canvas>
+    </>
   );
 }
 
@@ -200,35 +199,25 @@ const FlipBook = ({
   // const dispatch = useAppDispatch();
   // // ------- //
   useEffect(() => {
-    const value = ((loaded / 21) * 100).toFixed(0) as unknown as number;
+    console.log(total);
+    const value = ((loaded / 21) * 100).toFixed(0) as unknown as number; //21,13,9
     setPercentage(value);
   }, [progress, loaded, total]);
   return (
     <group scale={[5, 5, 5]}>
-      <Animation_Controllers StartAnimation={StartAnimation}>
-        <Suspense fallback={null}>
-          {/* <Book
+      <Suspense fallback={null}>
+        <Animation_Controllers StartAnimation={StartAnimation}>
+          <Book
             castShadow
             DiffuseMap={BookCover_Base_Color}
             RoughnessMap={BookCover_Roughness_map}
             NormalMap={BookCover_Normal_map}
             ImagesReady={ImagesReady}
             StartAnimation={StartAnimation}
-          /> */}
-          <One_Page
-            DiffuseMap={Paper_Color}
-            BumpMap={Paper_Bump}
-            ImagesReady={ImagesReady}
-            StartAnimation={StartAnimation}
-            setUploaded={setUploaded}
-            setImagesReady={setImagesReady}
-            setStartAnimation={setStartAnimation}
-            castShadow
-            Textures={Textures}
           />
 
           {/* <AllPages /> */}
-          {/* <Pages_000
+          <Pages_000
             DiffuseMap={Paper_Color}
             BumpMap={Paper_Bump}
             ImagesReady={ImagesReady}
@@ -238,8 +227,8 @@ const FlipBook = ({
             setStartAnimation={setStartAnimation}
             castShadow
             Textures={Textures ? Textures.slice(0, 8) : []}
-          /> */}
-          {/* <Pages_008
+          />
+          <Pages_008
             DiffuseMap={Paper_Color}
             BumpMap={Paper_Bump}
             ImagesReady={ImagesReady}
@@ -278,9 +267,9 @@ const FlipBook = ({
             StartAnimation={StartAnimation}
             castShadow
             Textures={Textures ? Textures.slice(40, 48) : []}
-          /> */}
-        </Suspense>
-      </Animation_Controllers>
+          />
+        </Animation_Controllers>
+      </Suspense>
     </group>
   );
 };

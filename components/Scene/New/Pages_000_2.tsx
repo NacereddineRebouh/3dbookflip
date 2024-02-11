@@ -44,8 +44,8 @@ type GLTFResult = GLTF & {
 type propsBook = JSX.IntrinsicElements["group"] & {
   DiffuseMap: THREE.Texture;
   BumpMap: THREE.Texture;
-  StartAnimation: Boolean;
-  ImagesReady: Boolean;
+  StartAnimation: boolean;
+  ImagesReady: boolean;
   Textures: THREE.Texture[];
   setUploaded: Dispatch<SetStateAction<boolean | null>>;
   setImagesReady: Dispatch<SetStateAction<boolean>>;
@@ -117,12 +117,12 @@ export function Pages_000_2(props: propsBook) {
         ?.getMixer()
         .removeEventListener("finished", onFinshed);
     };
-    if (props.StartAnimation || true) {
+    if (props.StartAnimation) {
       actions["Key.005Action"]
         ?.getMixer()
         .addEventListener("finished", onFinshed);
       Object.entries(actions).map(([key, value]) => {
-        value?.setLoop(THREE.LoopRepeat, 10);
+        value?.setLoop(THREE.LoopOnce, 0);
         value?.play().reset();
       });
     }

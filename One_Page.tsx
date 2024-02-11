@@ -4,11 +4,19 @@ Command: npx gltfjsx@6.2.16 public/Models/New/One_Page.glb --types
 */
 
 import * as THREE from "three";
-import React, { useEffect, useRef } from "react";
+import React, {
+  Dispatch,
+  SetStateAction,
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
+} from "react";
 import { useGLTF, useAnimations } from "@react-three/drei";
 import { GLTF } from "three-stdlib";
 import { useFrame, useThree } from "@react-three/fiber";
 import * as SkeletonUtils from "three/addons/utils/SkeletonUtils.js";
+import Page from "./Page";
 type GLTFResult = GLTF & {
   nodes: {
     Plane: THREE.Mesh;
@@ -25,52 +33,151 @@ type ActionName = "KeyAction";
 interface GLTFAction extends THREE.AnimationClip {
   name: ActionName;
 }
-type ContextType = Record<
-  string,
-  React.ForwardRefExoticComponent<JSX.IntrinsicElements["mesh"]>
->;
 
-export function One_Page(props: JSX.IntrinsicElements["group"]) {
+type propsBook = JSX.IntrinsicElements["group"] & {
+  DiffuseMap: THREE.Texture;
+  BumpMap: THREE.Texture;
+  StartAnimation: Boolean;
+  ImagesReady: Boolean;
+  Textures: THREE.Texture[];
+  setUploaded: Dispatch<SetStateAction<boolean | null>>;
+  setImagesReady: Dispatch<SetStateAction<boolean>>;
+  setStartAnimation: Dispatch<SetStateAction<boolean>>;
+};
+
+export function One_Page(props: propsBook) {
   const group = useRef<THREE.Group>(null);
   const group2 = useRef<THREE.Group>(null);
-  const { nodes, materials, animations } = useGLTF(
+  const { nodes, scene, materials, animations } = useGLTF(
     "/Models/New/One_Page.glb"
   ) as GLTFResult;
-  const { actions } = useAnimations(animations, group);
-  const { scene } = useThree();
-  console.log(animations);
+  const { animations: anims } = useGLTF(
+    "/Models/New/OnePage_Actions2.glb"
+  ) as GLTFResult;
+
+  const materialsArray = new Array(48).fill(materials["Opaline Paper"]);
+  const [Materials, setMaterials] =
+    useState<THREE.MeshStandardMaterial[]>(materialsArray); // Assuming image exists by default
+
+  console.log("Nodes0:", nodes);
+  // const { actions } = useAnimations(animations, group);
+  const clone = useMemo(() => SkeletonUtils.clone(scene), [scene]);
+  const clone2 = useMemo(() => SkeletonUtils.clone(scene), [scene]);
+  const clone3 = useMemo(() => SkeletonUtils.clone(scene), [scene]);
+  const clone4 = useMemo(() => SkeletonUtils.clone(scene), [scene]);
+  const clone5 = useMemo(() => SkeletonUtils.clone(scene), [scene]);
+  const cloneArray = new Array(48).fill(
+    useMemo(() => SkeletonUtils.clone(scene), [scene])
+  );
+  anims[0].tracks[0].name = "Plane.morphTargetInfluences";
+  anims[0].tracks[1].name = "Plane_1.morphTargetInfluences";
+  const a = anims[0];
+  const a2 = anims[1];
+  const a3 = anims[2];
+  const animationsArray = new Array(48).fill(a.clone());
+  console.log(anims[0]);
+  console.log(animations[0]);
   useEffect(() => {
-    new Array(48).fill(0).map((v, index) => {
-      const page = SkeletonUtils.clone(nodes.Plane);
-      // page.morphTargetDictionary = nodes.Plane.morphTargetDictionary;
-      // page.morphTargetInfluences = nodes.Plane.morphTargetInfluences;
-      page.name = "Plane";
-
-      page.position.set(0, 0.0005 * index, 0);
-      const mixer = new THREE.AnimationMixer(page);
-      const a = animations[0].clone();
-      a.tracks.splice(1, 1);
-      const action = mixer.clipAction(a);
-      action?.setLoop(THREE.LoopRepeat, 10);
-      group2.current?.add(page);
-      console.log(index);
-      action.play().reset();
-    });
-  }, []);
-  // useEffect(() => {
-  //   // actions.KeyAction?.setLoop(THREE.LoopRepeat, 10);
-  //   // actions.KeyAction?.play().startAt(1).reset();
-  //   const mixer = new THREE.AnimationMixer(nodes.Plane);
-  //   const action = mixer.clipAction(animations[0]);
-  //   action?.setLoop(THREE.LoopRepeat, 10);
-  //   // group2.current?.add(page);
-  //   action.play().reset();
-  // }, []);
-
+    if (props.ImagesReady && props.Textures) {
+      const Pages = props.Textures;
+      const mt: THREE.MeshStandardMaterial[] = [];
+      Materials.map((material, index) => {
+        const mat = material.clone();
+        mat.map = Pages[index];
+        mat.needsUpdate = true;
+        mt.push(mat);
+      });
+      setMaterials(mt);
+    } else {
+      setMaterials(materialsArray);
+    }
+  }, [props.ImagesReady]);
   return (
     <group ref={group} {...props} dispose={null}>
       <group name="Scene">
         <group ref={group2} name="Pages_000">
+          {Materials.map((material, index) => {
+            // console.log("Page:", index);
+
+            return (
+              <>
+                {index == 0 ? (
+                  <Page
+                    key={index}
+                    StartAnimation={props.StartAnimation}
+                    setUploaded={props.setUploaded}
+                    setImagesReady={props.setImagesReady}
+                    setStartAnimation={props.setStartAnimation}
+                    materialWhite={materials.White}
+                    scene={scene}
+                    animations={[animationsArray[index]]}
+                    material={material}
+                    index={index}
+                  />
+                ) : (
+                  <Page
+                    key={index}
+                    scene={scene}
+                    materialWhite={materials.White}
+                    animations={[animationsArray[index]]}
+                    material={material}
+                    index={index}
+                  />
+                )}
+              </>
+            );
+          })}
+
+          {/* <Page
+            scene={scene}
+            materialWhite={materials.White}
+            animations={[animationsArray[0]]}
+            material={materials["Opaline Paper"]}
+            index={0}
+          />
+          <Page
+            scene={scene}
+            materialWhite={materials.White}
+            animations={[animationsArray[1]]}
+            material={materials["Opaline Paper"]}
+            index={1}
+          />
+          <Page
+            scene={scene}
+            materialWhite={materials.White}
+            animations={[animationsArray[2]]}
+            material={materials["Opaline Paper"]}
+            index={2}
+          />
+          <Page
+            scene={scene}
+            materialWhite={materials.White}
+            animations={[animationsArray[3]]}
+            material={materials["Opaline Paper"]}
+            index={3}
+          />
+          <Page
+            scene={scene}
+            materialWhite={materials.White}
+            animations={[animationsArray[4]]}
+            material={materials["Opaline Paper"]}
+            index={4}
+          /> */}
+          {/* <Page
+            clone={clone3}
+            materialWhite={materials.White}
+            animations={[a]}
+            material={materials["Opaline Paper"]}
+            index={2}
+          />
+          <Page
+            materialWhite={materials.White}
+            clone={clone2}
+            animations={[a]}
+            material={materials["Opaline Paper"]}
+            index={3}
+          /> */}
+
           {/* <mesh name="Plane" geometry={nodes.Plane.geometry} material={materials['Opaline Paper']} />
           <mesh name="Plane_1" geometry={nodes.Plane_1.geometry} material={materials.White} /> */}
           {/* <mesh

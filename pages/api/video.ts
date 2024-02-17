@@ -45,6 +45,7 @@ export default async function handler(
 }
 async function CallPost(req: NextApiRequest, res: NextApiResponse) {
   let filePath = "";
+  console.log("req.body:::", req.headers);
   const bb = busboy({ headers: req.headers });
   bb.setMaxListeners(0).on("file", (_, file, info) => {
     // auth-api.mp4

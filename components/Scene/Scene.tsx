@@ -116,7 +116,7 @@ export default function Scene({
             // antialias: true,
           }
         }
-        className="!absolute !top-1/2 -translate-y-1/2 z-0 !left-0 w-full h-full"
+        className="!absolute !top-1/2 -translate-y-1/2 z-0 !left-0 w-screen h-screen"
         camera={{
           position: [0, 6, 0],
           fov: 14,
@@ -132,8 +132,6 @@ export default function Scene({
         {/* <Perf /> */}
         <Environement />
         <ambientLight intensity={1} color={"white"} />
-
-        <OrbitControls enableZoom />
         {/* <Model /> */}
         <mesh
           rotation={[-Math.PI / 2, 0, 0]}

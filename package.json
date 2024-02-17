@@ -11,6 +11,9 @@
   "dependencies": {
     "@aws-sdk/client-s3": "^3.507.0",
     "@ffmpeg-installer/ffmpeg": "^1.1.0",
+    "@ffmpeg/core": "^0.12.6",
+    "@ffmpeg/ffmpeg": "^0.12.10",
+    "@ffmpeg/util": "^0.12.1",
     "@ffprobe-installer/ffprobe": "^2.1.2",
     "@react-three/drei": "^9.97.0",
     "@react-three/fiber": "^8.15.16",
@@ -28,6 +31,8 @@
     "r3f-perf": "^7.1.2",
     "react": "^18",
     "react-dom": "^18",
+    "react-image-crop": "^11.0.5",
+    "sharp": "^0.33.2",
     "three": "^0.161.0",
     "youtube-transcript": "^1.0.6",
     "ytdl-core": "^4.11.5"

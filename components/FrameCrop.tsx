@@ -259,6 +259,7 @@ export default function FrameCrop({
 
       <button
         onClick={() => setGenerate(true)}
+        disabled={Video && CroppedRegion ? false : true}
         className="rounded-md border border-gray-100 bg-white py-2 px-4 shadow-md hover:shadow-lg transition-all duration-200 active:shadow-sm"
       >
         <label className="flex items-center gap-x-2 cursor-pointer">

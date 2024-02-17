@@ -55,10 +55,10 @@ export default function FrameCrop({
   const [Generate, setGenerate] = useState<boolean>(false);
 
   const [CroppedRegion, setCroppedRegion] = useState<{
-    realXoffset: number;
-    realYoffset: number;
-    realCropWidth: number;
-    realCropHeight: number;
+    Xoffset: number;
+    Yoffset: number;
+    CropWidth: number;
+    CropHeight: number;
   } | null>(null);
   const cropContainer = useRef<ReactCrop>(null);
 
@@ -238,10 +238,10 @@ export default function FrameCrop({
               const containerHeight =
                 cropContainer.current.componentRef.current.clientHeight;
               const cropValues = {
-                realXoffset: (c.x / containerWidth) * Video.width,
-                realYoffset: (c.y / containerHeight) * Video.height,
-                realCropWidth: (c.width / containerWidth) * Video.width,
-                realCropHeight: (c.height / containerHeight) * Video.height,
+                Xoffset: (c.x / containerWidth) * Video.width,
+                Yoffset: (c.y / containerHeight) * Video.height,
+                CropWidth: (c.width / containerWidth) * Video.width,
+                CropHeight: (c.height / containerHeight) * Video.height,
               };
               setCroppedRegion(cropValues);
               console.log(cropValues);

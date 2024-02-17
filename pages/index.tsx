@@ -115,7 +115,7 @@ export default function Home() {
 
   return (
     <main
-      className={`flex bg-zinc-50 h-full flex-col min-h-screen py-10 md:py-20 items-center justify-start mx-auto max-w-[2100px] p-0 ${mont.className}`}
+      className={`flex bg-zinc-50 h-full flex-col min-h-screen py-10 md:py-20 items-center justify-center mx-auto max-w-[2100px] p-0 ${mont.className}`}
     >
       {/* <AnimatePresence mode="wait">
         {!Loaded && (

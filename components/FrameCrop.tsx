@@ -162,9 +162,17 @@ export default function FrameCrop({
           if (res.status == 200) {
             const ffmpeg = ffmpegRef.current;
             await ffmpeg
-              .writeFile("CroppedRegion.txt", JSON.stringify(CroppedRegion))
+              .writeFile(
+                "/tmp/CroppedRegion.txt",
+                JSON.stringify(CroppedRegion)
+              )
               .then(async (value) => {
-                const file = await ffmpeg.readFile("CroppedRegion.txt");
+                const file = await ffmpeg.readFile("/tmp/CroppedRegion.txt");
+                const dir = await ffmpeg.listDir("/");
+                const tmp = await ffmpeg.listDir("/tmp");
+                console.log("/dir::", dir);
+                console.log("tmp::", tmp);
+                console.log("file::", file);
                 const params = {
                   Bucket: process.env.NEXT_PUBLIC_AWS_S3_BUCKET_NAME,
                   Key: `CroppedRegion.txt`,

@@ -31,6 +31,7 @@
     "r3f-perf": "^7.1.2",
     "react": "^18",
     "react-dom": "^18",
+    "react-icons": "^5.0.1",
     "react-image-crop": "^11.0.5",
     "sharp": "^0.33.2",
     "three": "^0.161.0",

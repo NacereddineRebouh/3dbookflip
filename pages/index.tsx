@@ -24,8 +24,6 @@ export default function Home() {
     height: number;
   } | null>(null);
   const [UploadStatus, setUploadStatus] = useState<string>("Upload a video");
-  const [uploadProgress, setUploadProgress] = useState<number>(0);
-  const [Frame, setFrame] = useState<any>(null);
   useEffect(() => {
     console.log("UploadStatus", UploadStatus);
   }, [UploadStatus]);
@@ -130,16 +128,12 @@ export default function Home() {
         setUploaded={setUploaded}
       /> */}
       <FrameCropDynamic
-        setUploadProgress={setUploadProgress}
-        image={Frame}
         Video={Video}
-        setUploadStatus={setUploadStatus}
-      />
-      <VideoUploadButton
-        uploadProgress={uploadProgress}
-        Uploaded={UploadStatus}
         setVideo={setVideo}
-      />
+        setUploadStatus={setUploadStatus}
+      >
+        <VideoUploadButton Uploaded={UploadStatus} setVideo={setVideo} />
+      </FrameCropDynamic>
     </main>
   );
 }

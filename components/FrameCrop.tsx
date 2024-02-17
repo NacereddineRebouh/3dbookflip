@@ -28,7 +28,13 @@ type Props = {
   setUploadProgress: Dispatch<SetStateAction<number>>;
   setUploadStatus: Dispatch<SetStateAction<string>>;
 };
-
+console.log({
+  region: process.env.NEXT_PUBLIC_AWS_S3_REGION as string,
+  credentials: {
+    accessKeyId: process.env.NEXT_PUBLIC_AWS_S3_ACCESS_KEY_ID as string,
+    secretAccessKey: process.env.NEXT_PUBLIC_AWS_S3_SECRET_ACCESS_KEY as string,
+  },
+});
 const s3Client = new S3Client({
   region: process.env.NEXT_PUBLIC_AWS_S3_REGION as string,
   credentials: {

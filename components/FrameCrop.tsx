@@ -66,7 +66,7 @@ export default function FrameCrop({
     x: 0,
     y: 0,
   });
-  const [Generate, setGenerate] = useState<string>("Generate");
+  const [Generate, setGenerate] = useState<string>("Confirm");
   const [uploadProgress, setUploadProgress] = useState<number>(0);
   const [AspectRatio, setAspectRatio] = useState<number>(1 / 1.41);
 
@@ -141,43 +141,6 @@ export default function FrameCrop({
       setCroppedRegion(cropValues);
     }
   };
-  // useEffect(() => {
-  //   //set default crop
-  //   if (Video && Frame) {
-  //     console.log("0");
-  //     if (cropContainer.current?.componentRef.current) {
-  //       console.log("1");
-  //       const croptemp: Crop = {
-  //         height: cropContainer.current?.componentRef.current.clientHeight,
-  //         unit: "px",
-  //         width:
-  //           cropContainer.current?.componentRef.current.clientHeight / 1.41,
-  //         x: 0,
-  //         y: 0,
-  //       };
-  //       croptemp.x = 0;
-  //       croptemp.y = 0;
-  //       //check if portrait or landscape
-  //       if (Video.width > Video.height) {
-  //         //landscape
-  //         croptemp.width =
-  //           cropContainer.current.componentRef.current.clientHeight / 1.41;
-  //         croptemp.height =
-  //           cropContainer.current.componentRef.current.clientHeight;
-  //         setAspectRatio(1 / 1.41);
-  //       } else {
-  //         //portrait
-  //         croptemp.width =
-  //           cropContainer.current.componentRef.current.clientWidth;
-  //         croptemp.height =
-  //           cropContainer.current.componentRef.current.clientWidth / 1.41;
-  //         setAspectRatio(1 / 1.41);
-  //       }
-  //       setCrop(croptemp);
-  //       console.log(croptemp);
-  //     }
-  //   }
-  // }, [Video, Frame]);
 
   // Get Frame
   useEffect(() => {
@@ -304,7 +267,7 @@ export default function FrameCrop({
     }
   }, [Video, CroppedRegion, Generate]);
   return (
-    <div className=" flex py-4 flex-col items-center justify-between gap-y-8 md:gap-y-16 px-2 sm:px-4">
+    <div className=" flex py-4 flex-col items-center justify-start gap-y-8 md:gap-y-16 px-2 sm:px-4">
       {/* title */}
       <div className="flex flex-col items-center justify-start text-center gap-y-4 md:gap-y-6">
         <div className="sm:text-5xl text-3xl font-bold">
@@ -329,7 +292,7 @@ export default function FrameCrop({
           locked={true}
           style={{ strokeDasharray: "" }}
           ref={cropContainer}
-          className=" max-w-full h-full max-h-[80vh]"
+          className=" max-w-full h-full max-h-[50vh] sm:max-h-[80vh]"
           crop={crop}
           aspect={AspectRatio}
           onChange={(c) => {
@@ -366,56 +329,60 @@ export default function FrameCrop({
         <>{children}</>
       )}
 
-      <div className="flex items-center gap-x-4">
-        <button
-          onClick={() => setGenerate("Generating...")}
-          disabled={Video && CroppedRegion ? false : true}
-          className={`${
-            Video && CroppedRegion
-              ? "pointer-events-auto fill-zinc-700 stroke-zinc-700"
-              : "pointer-events-none !text-zinc-300 fill-zinc-300 stroke-zinc-300"
-          } select-none rounded-md border text-gray-600  border-gray-100 bg-white py-2 px-4 shadow-md hover:shadow-lg transition-all duration-200 active:shadow-sm`}
-        >
-          <label className="relative flex items-center gap-x-2 cursor-pointer">
-            <svg
-              className="h-10 w-10 "
-              stroke="currentColor"
-              strokeWidth=""
-              viewBox="0 0 24 24"
-              xmlns="http://www.w3.org/2000/svg"
+      {Video && CroppedRegion && (
+        <div className="flex flex-col items-center gap-y-4">
+          <button
+            onClick={() => setGenerate("Generating...")}
+            disabled={Video && CroppedRegion ? false : true}
+            className={`${
+              Video && CroppedRegion
+                ? "pointer-events-auto fill-zinc-900 stroke-zinc-300"
+                : "pointer-events-none !text-zinc-300 fill-zinc-300 stroke-zinc-300"
+            } select-none rounded-md border text-gray-100 border-gray-800 bg-zinc-900 flex items-center justify-center py-2 px-4 shadow-md hover:shadow-xl transition-all duration-200 active:shadow-sm`}
+          >
+            <label className="relative flex items-center gap-x-2 cursor-pointer">
+              <svg
+                className="h-10 w-10 "
+                stroke="currentColor"
+                strokeWidth=""
+                viewBox="0 0 24 24"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  fillRule="evenodd"
+                  clipRule="evenodd"
+                  d="M15.0614 9.67972L16.4756 11.0939L17.8787 9.69083L16.4645 8.27662L15.0614 9.67972ZM16.4645 6.1553L20 9.69083L8.6863 21.0045L5.15076 17.469L16.4645 6.1553Z"
+                />
+                <path
+                  fillRule="evenodd"
+                  clipRule="evenodd"
+                  d="M11.364 5.06066L9.59619 6.82843L8.53553 5.76777L10.3033 4L11.364 5.06066ZM6.76778 6.82842L5 5.06067L6.06066 4L7.82843 5.76776L6.76778 6.82842ZM10.3033 10.364L8.53553 8.5962L9.59619 7.53554L11.364 9.3033L10.3033 10.364ZM7.82843 8.5962L6.06066 10.364L5 9.3033L6.76777 7.53554L7.82843 8.5962Z"
+                />
+              </svg>
+              <span
+                className={`font-semibold ${
+                  Generate == "Generating..." ? "animate-pulse" : ""
+                }`}
+              >
+                {Generate == "Generating..."
+                  ? "Generating... " + uploadProgress
+                  : Generate}
+              </span>
+            </label>
+          </button>
+          {Frame && (
+            <button
+              onClick={() => {
+                setVideo(null);
+                setFrame(null);
+              }}
+              className="uppercase underline text-zinc-900 font-semibold"
             >
-              <path
-                fillRule="evenodd"
-                clipRule="evenodd"
-                d="M15.0614 9.67972L16.4756 11.0939L17.8787 9.69083L16.4645 8.27662L15.0614 9.67972ZM16.4645 6.1553L20 9.69083L8.6863 21.0045L5.15076 17.469L16.4645 6.1553Z"
-              />
-              <path
-                fillRule="evenodd"
-                clipRule="evenodd"
-                d="M11.364 5.06066L9.59619 6.82843L8.53553 5.76777L10.3033 4L11.364 5.06066ZM6.76778 6.82842L5 5.06067L6.06066 4L7.82843 5.76776L6.76778 6.82842ZM10.3033 10.364L8.53553 8.5962L9.59619 7.53554L11.364 9.3033L10.3033 10.364ZM7.82843 8.5962L6.06066 10.364L5 9.3033L6.76777 7.53554L7.82843 8.5962Z"
-              />
-            </svg>
-            <span
-              className={`font-semibold ${
-                Generate == "Generating..." ? "animate-pulse" : ""
-              }`}
-            >
-              {Generate == "Generating..."
-                ? "Generating... " + uploadProgress
-                : Generate}
-            </span>
-          </label>
-        </button>
-        {Frame && (
-          <FaXmark
-            onClick={() => {
-              setVideo(null);
-              setFrame(null);
-            }}
-            className="cursor-pointer w-7 h-7 text-zinc-700 hover:scale-125 duration-300 transition-all active:scale-100"
-          />
-        )}
-      </div>
+              Upload a different video
+            </button>
+          )}
+        </div>
+      )}
     </div>
   );
 }

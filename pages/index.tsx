@@ -17,10 +17,6 @@ export default function Home() {
     width: number;
     height: number;
   } | null>(null);
-  const [UploadStatus, setUploadStatus] = useState<string>("Upload a video");
-  useEffect(() => {
-    console.log("UploadStatus", UploadStatus);
-  }, [UploadStatus]);
 
   return (
     <main
@@ -39,13 +35,7 @@ export default function Home() {
         setUploaded={setUploaded}
       /> */}
       <Image src={logo} width={300} height={100} alt={"Logo"} />
-      <FrameCropDynamic
-        Video={Video}
-        setVideo={setVideo}
-        setUploadStatus={setUploadStatus}
-      >
-        <VideoUploadButton Uploaded={UploadStatus} setVideo={setVideo} />
-      </FrameCropDynamic>
+      <FrameCropDynamic Video={Video} setVideo={setVideo}></FrameCropDynamic>
     </main>
   );
 }

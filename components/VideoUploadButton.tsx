@@ -14,26 +14,27 @@ type Props = {
     SetStateAction<{ video: File | null; width: number; height: number } | null>
   >;
   Uploaded: string;
+  Hide: boolean;
 };
 
-export default function VideoUploadButton({ setVideo, Uploaded }: Props) {
+export default function VideoUploadButton({ setVideo, Uploaded, Hide }: Props) {
   const [uploadStatus, setUploadStatus] = useState("");
   const videoRef = useRef<HTMLInputElement>(null);
   useEffect(() => {
     setUploadStatus(Uploaded);
     if (Uploaded == "Generated successfully") {
       setTimeout(() => {
-        setUploadStatus("Upload a video");
+        setUploadStatus("Please upload a video");
         setVideo(null);
         if (videoRef.current) videoRef.current.files = null;
       }, 4000);
     }
-  }, [Uploaded]);
+  }, [Uploaded, Hide]);
 
   const handleFileChange = async (
     event: React.ChangeEvent<HTMLInputElement>
   ): Promise<void> => {
-    if (event.target.files) {
+    if (event.target.files && event.target.files[0]) {
       const selectedFile = event.target.files[0];
       const url = URL.createObjectURL(selectedFile);
       const video = document.createElement("video");
@@ -60,14 +61,16 @@ export default function VideoUploadButton({ setVideo, Uploaded }: Props) {
       initial={{ opacity: 0 }}
       exit={{ opacity: 0 }}
       htmlFor="upload"
-      className="border-[2px]  border-zinc-700 border-dashed max-w-[90vw] aspect-video px-20 flex flex-col sm:gap-y-4 items-center justify-center h-full sm:text-lg text-center md:text-xl font-semibold italic drop-shadow-lg z-50 cursor-pointer "
+      className={`${
+        Hide ? "hidden" : "flex"
+      } border-[2px] border-zinc-700 border-dashed aspect-video flex-col sm:gap-y-4 items-center justify-center w-[80%] md:w-[60%] sm:text-lg text-center md:text-xl font-semibold italic drop-shadow-lg z-50 cursor-pointer `}
     >
       {uploadStatus == "Uploading..." ? (
         <Image
           src={LoadingSpiner}
           className="grayscale brightness-0"
-          height={100}
-          width={100}
+          height={40}
+          width={40}
           alt={""}
         />
       ) : (
@@ -85,7 +88,8 @@ export default function VideoUploadButton({ setVideo, Uploaded }: Props) {
           />
         </svg>
       )}
-      {uploadStatus == "Upload a video"
+      {uploadStatus == "Upload a video" ||
+      uploadStatus == "Please upload a video"
         ? "Please upload a video"
         : uploadStatus}
       <input

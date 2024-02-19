@@ -16,9 +16,10 @@ import axios, { AxiosRequestConfig } from "axios";
 import { GetTextures } from "./Scene/Scene";
 import FormData from "form-data";
 import { FaXmark } from "react-icons/fa6";
+import VideoUploadButton from "./VideoUploadButton";
 type Props = {
   Video: { video: File | null; width: number; height: number } | null;
-  children: ReactNode;
+  // children: ReactNode;
   // setCroppedRegion: Dispatch<
   //   SetStateAction<{
   //     realXoffset: number;
@@ -27,7 +28,7 @@ type Props = {
   //     realCropHeight: number;
   //   } | null>
   // >;
-  setUploadStatus: Dispatch<SetStateAction<string>>;
+  // setUploadStatus: Dispatch<SetStateAction<string>>;
   setVideo: Dispatch<
     SetStateAction<{
       video: File | null;
@@ -51,12 +52,8 @@ const s3Client = new S3Client({
   },
 });
 
-export default function FrameCrop({
-  Video,
-  setUploadStatus,
-  setVideo,
-  children,
-}: Props) {
+export default function FrameCrop({ Video, setVideo }: Props) {
+  const [Hide, setHide] = useState(false);
   const [loaded, setLoaded] = useState(false);
   const [Frame, setFrame] = useState<any>(null);
   const [crop, setCrop] = useState<Crop>({
@@ -69,6 +66,10 @@ export default function FrameCrop({
   const [Generate, setGenerate] = useState<string>("Confirm");
   const [uploadProgress, setUploadProgress] = useState<number>(0);
   const [AspectRatio, setAspectRatio] = useState<number>(1 / 1.41);
+  const [UploadStatus, setUploadStatus] = useState<string>("Upload a video");
+  useEffect(() => {
+    console.log("UploadStatus", UploadStatus);
+  }, [UploadStatus]);
 
   const [CroppedRegion, setCroppedRegion] = useState<{
     Xoffset: number;
@@ -100,6 +101,10 @@ export default function FrameCrop({
   useEffect(() => {
     load();
   }, []);
+  useEffect(() => {
+    if (Frame) setHide(true);
+    else setHide(false);
+  }, [Frame]);
 
   const onImageLoad = (e: React.SyntheticEvent<HTMLImageElement, Event>) => {
     const { naturalWidth: width, naturalHeight: height } = e.currentTarget;
@@ -292,7 +297,7 @@ export default function FrameCrop({
           locked={true}
           style={{ strokeDasharray: "" }}
           ref={cropContainer}
-          className=" max-w-full h-full max-h-[50vh] sm:max-h-[80vh]"
+          className="max-w-full h-full max-h-[40vh] sm:max-h-[80vh]"
           crop={crop}
           aspect={AspectRatio}
           onChange={(c) => {
@@ -323,13 +328,18 @@ export default function FrameCrop({
           <img src={Frame} onLoad={onImageLoad} />
         </ReactCrop>
       ) : (
+        <></>
         // <div className="border-[2px] border-zinc-700 border-dashed max-w-[90vw] aspect-video px-20 flex items-center justify-center h-full text-xl font-semibold italic drop-shadow-lg">
         //   Please upload a video
         // </div>
-        <>{children}</>
       )}
+      {/* <div
+        className="w-full h-full mx-auto flex items-center justify-center"
+        style={{ visibility: "collapse" }}
+      >
+    </div> */}
 
-      {Video && CroppedRegion && (
+      {Video && CroppedRegion && Frame && (
         <div className="flex flex-col items-center gap-y-4">
           <button
             onClick={() => setGenerate("Generating...")}
@@ -338,27 +348,9 @@ export default function FrameCrop({
               Video && CroppedRegion
                 ? "pointer-events-auto fill-zinc-900 stroke-zinc-300"
                 : "pointer-events-none !text-zinc-300 fill-zinc-300 stroke-zinc-300"
-            } select-none rounded-md border text-gray-100 border-gray-800 bg-zinc-900 flex items-center justify-center py-2 px-4 shadow-md hover:shadow-xl transition-all duration-200 active:shadow-sm`}
+            } select-none rounded-md border text-gray-100 border-gray-800 bg-zinc-900 flex items-center justify-center py-4 px-12 shadow-md hover:shadow-xl transition-all duration-200 active:shadow-sm`}
           >
-            <label className="relative flex items-center gap-x-2 cursor-pointer">
-              <svg
-                className="h-10 w-10 "
-                stroke="currentColor"
-                strokeWidth=""
-                viewBox="0 0 24 24"
-                xmlns="http://www.w3.org/2000/svg"
-              >
-                <path
-                  fillRule="evenodd"
-                  clipRule="evenodd"
-                  d="M15.0614 9.67972L16.4756 11.0939L17.8787 9.69083L16.4645 8.27662L15.0614 9.67972ZM16.4645 6.1553L20 9.69083L8.6863 21.0045L5.15076 17.469L16.4645 6.1553Z"
-                />
-                <path
-                  fillRule="evenodd"
-                  clipRule="evenodd"
-                  d="M11.364 5.06066L9.59619 6.82843L8.53553 5.76777L10.3033 4L11.364 5.06066ZM6.76778 6.82842L5 5.06067L6.06066 4L7.82843 5.76776L6.76778 6.82842ZM10.3033 10.364L8.53553 8.5962L9.59619 7.53554L11.364 9.3033L10.3033 10.364ZM7.82843 8.5962L6.06066 10.364L5 9.3033L6.76777 7.53554L7.82843 8.5962Z"
-                />
-              </svg>
+            <label className="relative w-full flex items-center gap-x-2 cursor-pointer">
               <span
                 className={`font-semibold ${
                   Generate == "Generating..." ? "animate-pulse" : ""
@@ -371,18 +363,27 @@ export default function FrameCrop({
             </label>
           </button>
           {Frame && (
-            <button
+            <label
+              htmlFor="upload"
               onClick={() => {
+                setUploadStatus("Please upload a video");
                 setVideo(null);
                 setFrame(null);
+                setHide(false);
+                document?.getElementById("upload")?.click();
               }}
               className="uppercase underline text-zinc-900 font-semibold"
             >
               Upload a different video
-            </button>
+            </label>
           )}
         </div>
       )}
+      <VideoUploadButton
+        Uploaded={UploadStatus}
+        setVideo={setVideo}
+        Hide={Hide}
+      />
     </div>
   );
 }

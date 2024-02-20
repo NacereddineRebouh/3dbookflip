@@ -20,7 +20,7 @@ export default function Home() {
 
   return (
     <main
-      className={`flex bg-zinc-50 h-full flex-col min-h-screen pb-10 md:py-20 items-center justify-start mx-auto max-w-[2100px] p-0 ${mont.className}`}
+      className={`flex bg-zinc-50 h-full flex-col min-h-screen py-10 md:py-20 items-center justify-start mx-auto max-w-[2100px] p-0 ${mont.className}`}
     >
       {/* <AnimatePresence mode="wait">
         {!Loaded && (
@@ -34,7 +34,13 @@ export default function Home() {
         Video={Video}
         setUploaded={setUploaded}
       /> */}
-      <Image src={logo} width={300} height={100} alt={"Logo"} />
+      <Image
+        src={logo}
+        width={200}
+        height={100}
+        alt={"Logo"}
+        className="!w-48 md:!w-64"
+      />
       <FrameCropDynamic Video={Video} setVideo={setVideo}></FrameCropDynamic>
     </main>
   );

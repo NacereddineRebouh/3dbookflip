@@ -107,8 +107,12 @@ export default function FrameCrop({ Video, setVideo }: Props) {
   }, [Frame]);
 
   const onImageLoad = (e: React.SyntheticEvent<HTMLImageElement, Event>) => {
-    const { naturalWidth: width, naturalHeight: height } = e.currentTarget;
+    const { clientWidth: width, clientHeight: height } = e.currentTarget;
     let aspr = 1 / 1.41;
+    console.log("e.currentTarget:", e.currentTarget);
+    console.log("width:", width);
+    console.log("height:", height);
+
     if (width > height) {
       //landscape
       aspr = 1.41 / 1;
@@ -118,19 +122,24 @@ export default function FrameCrop({ Video, setVideo }: Props) {
       {
         // You don't need to pass a complete crop into
         // makeAspectCrop or centerCrop.
-        unit: "%",
-        width: 100,
+        unit: "px",
+        width: width,
       },
       aspr,
       width,
       height
     );
+
+    console.log("crop:", crop);
     setCrop(crop);
     if (cropContainer.current?.componentRef.current && Video) {
       const containerWidth =
         cropContainer.current.componentRef.current.clientWidth;
       const containerHeight =
         cropContainer.current.componentRef.current.clientHeight;
+
+      console.log("containerHeight:", containerHeight);
+      console.log("containerWidth:", containerWidth);
       let Orientation = "landscape";
       if (Video.width <= Video.height) {
         //portrait
@@ -143,6 +152,7 @@ export default function FrameCrop({ Video, setVideo }: Props) {
         CropHeight: (crop.height / containerHeight) * Video.height,
         Orientation: Orientation,
       };
+      console.log("cropValues:", cropValues);
       setCroppedRegion(cropValues);
     }
   };
@@ -370,7 +380,12 @@ export default function FrameCrop({ Video, setVideo }: Props) {
                 setVideo(null);
                 setFrame(null);
                 setHide(false);
-                document?.getElementById("upload")?.click();
+                if (document.getElementById("upload")) {
+                  document?.getElementById("upload")?.click();
+                  (
+                    document.getElementById("upload") as HTMLInputElement
+                  ).value = "";
+                }
               }}
               className="uppercase underline text-zinc-900 font-semibold"
             >

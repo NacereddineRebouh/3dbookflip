@@ -12,23 +12,13 @@ import { FFmpeg } from "@ffmpeg/ffmpeg";
 import { fetchFile, toBlobURL } from "@ffmpeg/util";
 import "react-image-crop/dist/ReactCrop.css";
 import { PutObjectCommand, S3Client } from "@aws-sdk/client-s3";
-import axios, { AxiosRequestConfig } from "axios";
+import axios, { AxiosRequestConfig, CancelTokenSource } from "axios";
 import { GetTextures } from "./Scene/Scene";
 import FormData from "form-data";
 import { FaXmark } from "react-icons/fa6";
 import VideoUploadButton from "./VideoUploadButton";
 type Props = {
   Video: { video: File | null; width: number; height: number } | null;
-  // children: ReactNode;
-  // setCroppedRegion: Dispatch<
-  //   SetStateAction<{
-  //     realXoffset: number;
-  //     realYoffset: number;
-  //     realCropWidth: number;
-  //     realCropHeight: number;
-  //   } | null>
-  // >;
-  // setUploadStatus: Dispatch<SetStateAction<string>>;
   setVideo: Dispatch<
     SetStateAction<{
       video: File | null;
@@ -53,6 +43,10 @@ const s3Client = new S3Client({
 });
 
 export default function FrameCrop({ Video, setVideo }: Props) {
+  const [cancelToken, setCancelToken] = useState<CancelTokenSource | null>(
+    null
+  );
+
   const [Hide, setHide] = useState(false);
   const [loaded, setLoaded] = useState(false);
   const [Frame, setFrame] = useState<any>(null);
@@ -109,9 +103,6 @@ export default function FrameCrop({ Video, setVideo }: Props) {
   const onImageLoad = (e: React.SyntheticEvent<HTMLImageElement, Event>) => {
     const { clientWidth: width, clientHeight: height } = e.currentTarget;
     let aspr = 1 / 1.41;
-    console.log("e.currentTarget:", e.currentTarget);
-    console.log("width:", width);
-    console.log("height:", height);
 
     if (width > height) {
       //landscape
@@ -130,7 +121,6 @@ export default function FrameCrop({ Video, setVideo }: Props) {
       height
     );
 
-    console.log("crop:", crop);
     setCrop(crop);
     if (cropContainer.current?.componentRef.current && Video) {
       const containerWidth =
@@ -138,8 +128,6 @@ export default function FrameCrop({ Video, setVideo }: Props) {
       const containerHeight =
         cropContainer.current.componentRef.current.clientHeight;
 
-      console.log("containerHeight:", containerHeight);
-      console.log("containerWidth:", containerWidth);
       let Orientation = "landscape";
       if (Video.width <= Video.height) {
         //portrait
@@ -152,7 +140,6 @@ export default function FrameCrop({ Video, setVideo }: Props) {
         CropHeight: (crop.height / containerHeight) * Video.height,
         Orientation: Orientation,
       };
-      console.log("cropValues:", cropValues);
       setCroppedRegion(cropValues);
     }
   };
@@ -214,6 +201,8 @@ export default function FrameCrop({ Video, setVideo }: Props) {
     if (Video && CroppedRegion && Generate == "Generating...") {
       const f = async () => {
         try {
+          const source = axios.CancelToken.source();
+          setCancelToken(source);
           const data = new FormData();
           data.append("file", Video.video as any);
           data.append("_method", "put");
@@ -232,6 +221,7 @@ export default function FrameCrop({ Video, setVideo }: Props) {
                 setUploadProgress(percentComplete);
               }
             },
+            cancelToken: source.token,
           };
           const res = await axios.post("/api/video", data, config);
 
@@ -259,12 +249,6 @@ export default function FrameCrop({ Video, setVideo }: Props) {
 
             const Pages = GetTextures();
             console.log(Pages);
-            // setTextures(Pages);
-            // setImagesReady(true);
-
-            // setTimeout(() => {
-            //   setStartAnimation(true);
-            // }, 1000);
             setUploadStatus("Generated successfully");
             setGenerate("Generated!");
             setTimeout(() => {
@@ -305,6 +289,9 @@ export default function FrameCrop({ Video, setVideo }: Props) {
       {Frame ? (
         <ReactCrop
           locked={true}
+          disabled={
+            Video && CroppedRegion && Generate == "Generating..." ? true : false
+          }
           style={{ strokeDasharray: "" }}
           ref={cropContainer}
           className="max-w-full h-full max-h-[40vh] sm:max-h-[80vh]"
@@ -380,8 +367,10 @@ export default function FrameCrop({ Video, setVideo }: Props) {
                 setVideo(null);
                 setFrame(null);
                 setHide(false);
+                setGenerate("Generate");
+                if (cancelToken) cancelToken.cancel("Generation Cancelled!");
                 if (document.getElementById("upload")) {
-                  document?.getElementById("upload")?.click();
+                  // document?.getElementById("upload")?.click();
                   (
                     document.getElementById("upload") as HTMLInputElement
                   ).value = "";
